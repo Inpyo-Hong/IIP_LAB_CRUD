@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="minimum-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no" name="viewport" />
+    <title>IIP Lab - Intelligent Information Processing Lab</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel="stylesheet"
+        type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <!-- Core theme CSS (includes Bootstrap)-->
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body id="page-top" style="font-family: noto-demilight;">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color: black;">
+        <div class="container">
+            <button style="background-color: black;" class="navbar-toggler navbar-toggler-right" type="button"
+                data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
+                aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars ml-1"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav text-uppercase ml-auto">
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'index' %}">home</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'board' %}">List</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="board" style="margin-top: 110px;">
+        
+    
+        <div class="board-contents mx-auto">
+            
+            <div class="block" style="height:3em;">
+                <div class="inline-block" >
+                    <a class="nav-link js-scroll-trigger" href="{% url 'board' %}" style="color: black;">
+                        <h2 style="float: left;">LIST</h2>
+                    </a>
+                </div>
+            </div>
+            <div class="block" style="height: 1.5em;">
+                <hr>
+            </div>
+
+            <div class="block" style="margin-top: 2%">
+                <div class="inline-block" style="padding-left: 1%;">
+                    <h3 style="float: left;">{{post.title}}</h3>
+                </div>
+                <!-- <div class="inline-block" style="background-color: darkorchid; float:right">
+                    <p>WRITER: {{post.writer}}</p>
+                </div> -->
+            </div>
+            <div class="block" style="float: left; margin-top:1%; padding-left:1%;">
+                <div class="inline-block">
+                    <p style="float: left; font-family:noto-thin;font-weight:lighter ">{{post.date}}</p>
+                </div>
+               <div class="inline-block" style="float: right;">
+                <p style="float: left; font-family:noto-thin;font-weight:lighter; float:right; ">WRITER: {{post.writer}}</p>
+               </div>
+            </div>
+            
+            {%if post.file %}
+            <div class="block" style="background-color: #e3dede; height:5em; border-top:1px solid grey; border-bottom:1px solid grey; margin-top:2%;">
+                <div class="inline-block" style="width: 10%; margin-top:30px; ">
+                    <p>첨부파일</p>
+                </div>
+                <div class="inline-block" style="width:2%; margin-top:30px; margin-left:15px">
+                    <img src="{% static 'document.png' %}" width="18" height="18">
+                </div>
+                <div class="inline-block" style="width: 80%; margin-top:32px; ">
+                    <a style="float: left;" class="posting-click" href="{{post.file.url}}" download="{{post.file.url}}">{{post.file}}</a>
+                </div>
+            </div>
+            {% endif %}
+            
+            <div class="block" style="font-weight: lighter; margin-top:3%; padding-left: 1%;">
+                <p style="text-align: left;">{{post.body}}</p>
+            </div>
+            
+            <div class="block" style="margin-top: 5%;">
+                <button class="my-button" onclick="location.href = '/board/{{post.pk}}/delete'" style="float: right; margin-right:2%;">DELETE</button>
+                <button class="my-button" onclick="location.href = '/board/{{post.pk}}/edit'" style="float: right; margin-right:2%;">MODIFY</button>
+            </div>
+                
+        </div>
+        
+    </div>
+
+</body>
+
+</html>

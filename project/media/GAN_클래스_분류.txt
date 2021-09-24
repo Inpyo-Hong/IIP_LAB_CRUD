@@ -1,0 +1,4 @@
+dyed-lifted-polyps 1600  --> 1596
+polyps 1600 --> 1585
+z-line 1600  --> 1479
+esophagitis 1600  --> 1564
