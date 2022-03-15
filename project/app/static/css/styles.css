@@ -544,6 +544,26 @@ pre code {
   overflow-y: scroll;
 }
 
+/* 설명부분 반응형 */
+@media (max-width:767px) {
+  .phone{
+    min-height: 500px;
+  }
+}
+/* 설명부분 반응형 */
+@media (max-width:767px){
+  .inline-block{
+    min-width: 300px;
+    min-height: 500px;
+    max-height: 600px;
+    padding-bottom: 30px;
+    margin-left: 30px;
+    font-size: 30px;
+    margin-left: 60px;
+  }
+}
+
+
 .container {
   width: 100%;
   padding-right: 0.75rem;
@@ -551,26 +571,30 @@ pre code {
   margin-right: auto;
   margin-left: auto;
 }
+
+}
 @media (min-width: 576px) {
-  .container {
+  .container .inline-block {
     max-width: 540px;
   }
 }
 @media (min-width: 768px) {
-  .container {
+  .container .inline-block{
     max-width: 720px;
   }
 }
 @media (min-width: 992px) {
-  .container {
+  .container .inline-block{
     max-width: 960px;
   }
 }
 @media (min-width: 1200px) {
-  .container {
+  .container .inline-block{
     max-width: 1140px;
   }
 }
+
+
 
 .container-fluid, .container-xl, .container-lg, .container-md, .container-sm {
   width: 100%;
