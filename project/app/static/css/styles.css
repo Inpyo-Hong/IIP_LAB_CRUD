@@ -54,7 +54,7 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
+article, aside, figcaption, figure, footer, header, hgroup, main,  section {
   display: block;
 }
 
@@ -2024,30 +2024,30 @@ pre code {
   text-shadow: 0 0 0 #495057;
 }
 .form-control:focus {
-  color: #495057;
+  color: #000000;
   background-color: #fff;
   border-color: #ffeeb5;
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(254, 209, 54, 0.25);
 }
 .form-control::-webkit-input-placeholder {
-  color: #6c757d;
+  color: #000000;
   opacity: 1;
 }
 .form-control::-moz-placeholder {
-  color: #6c757d;
+  color: #000000;
   opacity: 1;
 }
 .form-control:-ms-input-placeholder {
-  color: #6c757d;
+  color: #000000;
   opacity: 1;
 }
 .form-control::-ms-input-placeholder {
-  color: #6c757d;
+  color: #000000;
   opacity: 1;
 }
 .form-control::placeholder {
-  color: #6c757d;
+  color: #000000;
   opacity: 1;
 }
 .form-control:disabled, .form-control[readonly] {
@@ -2065,7 +2065,7 @@ input[type=month].form-control {
 }
 
 select.form-control:focus::-ms-value {
-  color: #495057;
+  color: #000000;
   background-color: #fff;
 }
 
@@ -3923,6 +3923,12 @@ input[type=button].btn-block {
   cursor: default;
 }
 
+
+
+
+
+
+
 .nav-tabs {
   border-bottom: 1px solid #dee2e6;
 }
@@ -3960,7 +3966,7 @@ input[type=button].btn-block {
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
   color: #fff;
-  background-color: #fed136;
+  background-color: #000000;
 }
 
 .nav-fill .nav-item {
@@ -4310,6 +4316,9 @@ input[type=button].btn-block {
 
 .navbar-dark .navbar-brand {
   color: #fff;
+}
+.navbar-pastel{
+  color: AFB9C8;
 }
 .navbar-dark .navbar-brand:hover, .navbar-dark .navbar-brand:focus {
   color: #fff;
@@ -10656,11 +10665,17 @@ details p {
 }
 @font-face {
   font-family: 'noto-medium';
-  src: url(("{% static 'font/NotoSansCJKkr-Medium.otf' %}") format('opentype');
+  src: url("{% static 'font/NotoSansCJKkr-Medium.otf' %}") format('opentype');
 }
 @font-face {
   font-family: 'noto-thin';
-  src: url(("{% static 'font/NotoSansCJKkr-Thin.otf' %}") format('opentype');
+  src: url("{% static 'font/NotoSansCJKkr-Thin.otf' %}") format('opentype');
+}
+@font-face {
+  font-family: 'HoengseongHanu';
+  src: url("{% static 'font/HoengseongHanu.otf' %}") format('opentype');
+  font-weight: normal;
+  font-style: normal;
 }
 
 .my-button{
@@ -10707,3 +10722,9 @@ details p {
   border-top:1px solid lightgrey;
   border-bottom:1px solid lightgrey;
 }
+.inline-block{
+  display: inline-block;
+}
+
+
+ 

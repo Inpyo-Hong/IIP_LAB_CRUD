@@ -31,7 +31,7 @@
 
 <body id="page-top" style="font-family: noto-demilight;">
     <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color: black; font-family: noto-medium;">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color: white; font-family: noto-medium;">
         <div class="container">
             <button style="background-color: black;" class="navbar-toggler navbar-toggler-right" type="button"
                 data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
@@ -41,8 +41,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav text-uppercase ml-auto" style="font-family: noto-medium;">
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" style="font-family: noto-medium;" href="{% url 'index' %}">home</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" style="font-family: noto-medium;" href="{% url 'board' %}">List</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" style="font-family: noto-medium; color:black;" href="{% url 'index' %}">home</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" style="font-family: noto-medium; color:black;" href="{% url 'board' %}">Research</a></li>
                 </ul>
             </div>
         </div>
@@ -55,7 +55,7 @@
                 <div class="block mx-auto" style="height:3em;">
                     <div class="inline-block" >
                         <a class="nav-link js-scroll-trigger" href="{% url 'board' %}" style="color: black;">
-                            <h2 style="float: left;">LIST</h2>
+                            <h2 style="float: left;">Research</h2>
                         </a>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                 
                 <div class="board-nav mx-auto">
                     
-                    <div class="block board-nav">
+                    <div class="block board-nav" style="background-color: #e3eef5;">
                         <div class="box" style="width: 45%;">
                             <p>TITLE</p>
                         </div>
