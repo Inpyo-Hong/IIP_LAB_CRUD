@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-bqt8e(wcd5@4f8r8_$s7w(_&me3+*7($=j3#fsnkxjpk%-iot1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ["192.9.200.236", "iiplab.gachon.ac.kr"]
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["192.9.200.236", "iiplab.gachon.ac.kr"]
+# ALLOWED_HOSTS = []
 #iip.gachon.ac.kr
 
 
