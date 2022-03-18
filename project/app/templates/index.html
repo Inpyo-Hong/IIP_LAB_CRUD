@@ -1,54 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <meta content="yes" name="apple-mobile-web-app-capable" />
-        <meta content="minimum-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no" name="viewport" />
-        <title>IIP Lab - Intelligent Information Processing Lab</title>
-        <link rel="icon" type="image/x-icon" href="favicon.ico" />
-        <!-- Font Awesome icons (free version)-->
-        <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
-        <!-- Google fonts-->
-        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
-        <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
-        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="css/styles" rel="stylesheet" />
-        {% load static %}
-        <link rel="stylesheet" href="{% static 'css/styles.css'%}">
-        <link rel="icon" type="img/png" href="../static/img/nav_logo.png">
-    </head>
-    <body id="page-top" style="font-family: noto-demilight;">
-        <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color: black;">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="minimum-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no" name="viewport" />
+    <title>IIP Lab - Intelligent Information Processing Lab</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel="stylesheet"
+        type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles" rel="stylesheet" />
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css'%}">
+    <style>
+        * {margin:0;padding:0;}
+        /* INPUT 가리기 */
+        .lsection input[id*="slide"] {display:none;}
+
+        /* 슬라이드 영역 - max-width 크기를 조절해주면 됩니다*/
+        .lsection .slidewrap {max-width:1200px;margin: 0 auto;overflow:hidden;}
+        .lsection .slidelist {white-space:nowrap;font-size:0;}
+        .lsection .slidelist > li {display:inline-block;vertical-align:middle;width:100%;transition:all .5s;}
+        .lsection .slidelist > li > a {display:block;position:relative;overflow:hidden;} /* 화살표 화면 밖으로 나가면 안보이도록 OVERFLOW로 가림처리 */
+        .lsection .slidelist > li > a img {width:100%;}
+        
+        /* 좌우로 넘기는 LABEL버튼에 대한 스타일 */
+        .lsection .slidelist label {position:absolute;z-index:1;top:50%;transform:translateY(-50%);padding:50px;cursor:pointer;}
+        .lsection .slidelist .left {left:-300px; background:url('../static/img/left.png') center center / 100% no-repeat;} /* LEFT -300px로 화살표가 안보이게 되어있도록 준 스타일 */
+        .lsection .slidelist .right {right:-300px;background:url('../static/img/right.png') center center/100% no-repeat;} /* RIGHT -300px로 화살표가 안보이게 되어있도록 준 스타일 */
+
+        /* INPUT이 체크되면 변화값이 li까지 전달되는 스타일 */
+        .lsection input[id="slide01"]:checked ~ .slidewrap .slidelist > li {transform:translateX(0%);}
+        .lsection input[id="slide02"]:checked ~ .slidewrap .slidelist > li {transform:translateX(-100%);}
+        .lsection input[id="slide03"]:checked ~ .slidewrap .slidelist > li {transform:translateX(-200%);}
+
+        /* INPUT이 체크되면 변화값이 LEFT,RIGHT에 전달되는 스타일 */
+        .lsection input[id="slide01"]:checked ~ .slidewrap li:nth-child(1) .left {left:30px;transition:all .35s ease .5s;} /* 1번 INPUT이 체크되면 1번 슬라이드의 왼쪽 화살표의 LEFT값이 변하면서 나타나도록 준 스타일 */
+        .lsection input[id="slide01"]:checked ~ .slidewrap li:nth-child(1) .right {right:30px;transition:all .35s ease .5s;} /* 1번 INPUT이 체크되면 1번 슬라이드의 오른쪽 화살표의 LEFT값이 변하면서 나타나도록 준 스타일 */
+        .lsection input[id="slide02"]:checked ~ .slidewrap li:nth-child(2) .left {left:30px;transition:all .35s ease .5s;} /* 2번 INPUT이 체크되면 1번 슬라이드의 왼쪽 화살표의 LEFT값이 변하면서 나타나도록 준 스타일 */
+        .lsection input[id="slide02"]:checked ~ .slidewrap li:nth-child(2) .right {right:30px;transition:all .35s ease .5s;} /* 2번 INPUT이 체크되면 1번 슬라이드의 오른쪽 화살표의 LEFT값이 변하면서 나타나도록 준 스타일 */
+        .lsection input[id="slide03"]:checked ~ .slidewrap li:nth-child(3) .left {left:30px;transition:all .35s ease .5s;} /* 3번 INPUT이 체크되면 1번 슬라이드의 왼쪽 화살표의 LEFT값이 변하면서 나타나도록 준 스타일 */
+        .lsection input[id="slide03"]:checked ~ .slidewrap li:nth-child(3) .right {right:30px;transition:all .35s ease .5s;} /* 3번 INPUT이 체크되면 1번 슬라이드의 오른쪽 화살표의 LEFT값이 변하면서 나타나도록 준 스타일 */
+        input::placeholder {color:rgb(0, 0, 0);}
+        input::-webkit-input-placeholder {color:rgb(0, 0, 0);}
+        input:-ms-input-placeholder {color:rgb(0, 0, 0);}
+    </style>
+    <link rel="icon" type="img/png" href="../static/img/nav_logo.png">
+</head>
+
+<body id="page-top" style="font-family:noto-demilight;">
+    
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-pastel fixed-top" id="mainNav" style="background-color: #ffffff;font-family: noto-medium;">
+        <div class="container">
+            <button style="background-color: black;" class="navbar-toggler navbar-toggler-right" type="button"
+                data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
+                aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars ml-1"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive" style="color: black;">
+                <ul class="navbar-nav text-uppercase ml-auto">
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#home" style="color:black;text-decoration: none;">home</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger"
+                            href="#scie_publications" style="color:black;text-decoration: none;">SCIE&nbspPUBLICATIONS</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger"
+                            href="#research_projects" style="color:black;text-decoration: none;">Research&nbspProjects</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#members" style="color:black;text-decoration: none;">Members</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" style="color:black;text-decoration: none;"
+                            href="#awards">Awards&nbsp&&nbspHonors</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" style="color:black;text-decoration: none;"href="#contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" style="color:black;text-decoration: none;"href="/board">Research</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Home -->
+
+    <div>
+
+    </div>
+    <section class="page-section" id="home" style="background-color: #ffffff;">
+        <div class="" style="width: 100%; height: 20em;background-image: url(../static/img/new_background.png);">
+            <div class="container" style="height: 10em; padding-top:70px;">
+               <h1 style="font-family:HoengseongHanu; font-size:4em;">IIP LAB</h1>
+            </div>
+            <div class="container" style="height: 10em; padding-top:30px;">
+                <h3 style="font-family:HoengseongHanu ;">Intelligent Information Processing Lab</h3>
+            </div>
+            <!-- <div class="row text-center">
+                <div class="container">
+                    <a style="color: white; background-color: #222222; border: 6px solid #f8f9fa; border-radius: 20px;"
+                        onmouseout="this.style.backgroundColor='#222222'; this.style.color='white'"
+                        onmouseover="this.style.backgroundColor='black'; this.style.color='white'"
+                        class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#contact">Contact Us</a>
+                </div>
+            </div>  -->
+        </div>
+    </section>
+    <!--photo & Description-->
+    <section class="page-section" style="margin-top:-6em;" >
+        <div class="container phone" style="height: 15em; display:block;background-color: white;">
+            <h3 class="section-heading text-uppercase"style="text-align:left;">Welcome to IIP Lab!</h3>
+            <p style="margin-top: 30px; font-size:large" class="phone">
+                The IIP Lab at Gachon University is led by Prof. Chang Choi.<br>
+                We mainly focus on developing Artificial Intelligence such as 
+                computer vision, natural language processing, context aware, network, 
+                data processing, knowledge ontology, reinforcement learning, AI security, etc.<br>
+                We are looking for undergraduate or graduate students to work on 
+                research projects in AI and Intelligent Security. <br>Please feel free to contact me by e-mail via changchoi AT gachon.ac.kr
+            </p>
+        </div>
+        <!-- <div class="row text-center" style="margin-top: 20px;">
             <div class="container">
-                <button style="background-color: black;"
-                class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    Menu
-                    <i class="fas fa-bars ml-1"></i>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav text-uppercase ml-auto">
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#home">home</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#scie_publications">SCIE&nbspPUBLICATIONS</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#research_projects">Research&nbspProjects</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#members">Members</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#awards">Awards&nbsp&&nbspHonors</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contact</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'login' %}">Research</a></li>
+                <a style="color: black; background-color: #ffffff; border: 6px solid #9ccbe5; border-radius: 20px;"
+                    onmouseout="this.style.backgroundColor='#ffffff'; this.style.color='black'"
+                    onmouseover="this.style.backgroundColor='#9ccbe5'; this.style.color='white'"
+                    class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#contact">Contact Us</a>
+            </div>
+        </div>  -->
+
+        <div class="container" style="display: block; padding-top:80px;">
+            <div class="inline-block" style="width: 33%; height:35em;">
+                <img src="{% static 'img/vision.png'%}" style="width: 50%; height:40%; margin-right:120px">
+                <h3 style="text-align: left; margin-top:10px">Deep-Learning for Computer Vision</h3>
+                <div style="display: block; width:90%; font-family:sans-serif; margin-top:30px;" class="phone">
+                    <ul style="text-align: left; display:block;">
+                        <li><span style="font-size:X-large">Image Captioning</span></li>
+                        <li><span style="font-size:X-large">Data Augmentation</span></li>
+                        <li><span style="font-size:X-large">Adversarial Attack</span></li>
+                        <li><span style="font-size:X-large">Object Detection</span></li>
                     </ul>
                 </div>
             </div>
-        </nav>
-        <!-- Home -->
-        <section class="page-section" id="home" style="background-color: #222222;">
-            <div class="container">
-                <div class="text-center">
-                    <img src="{% static 'img/logo.png'%}" style="width: 100%;">
-                    <h3 class="section-subheading text-muted"></h3>
+            <div class="inline-block phone-margin" style="width: 33%; height:35em;">
+                <img src="{% static 'img/timeseries.png'%}" style="width: 50%; height:40%;margin-right:80px">
+                <h3 style="text-align: left; margin-top:10px">Time Series <br> Processing & Analysis</h3>
+                <div style="display: block; width:90%; font-family:sans-serif; margin-top:30px;">
+                    <ul style="text-align: left; display:block;">
+                        <li><span style="font-size:X-large">Natural Language Processing</span></li>
+                        <li><span style="font-size:X-large">Time-series Processing</span></li>
+                        <li><span style="font-size:X-large">1 Dimension Predicting</span></li>
+                        <li><span style="font-size:X-large">Bio Data Predicting</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="inline-block" style="width: 33%; height:35em; padding-left:20px;">
+                <img src="{% static 'img/ai.png'%}" style="width: 50%; height:40%;">
+                <h3 style="text-align: left; margin-top:10px">Artificial<br>Intelligence</h3>
+                <div style="display: block; width:90%; font-family:sans-serif; margin-top:30px;">
+                    <ul style="text-align: left; display:block;">
+                        <li><span style="font-size:X-large">Knowledge Ontology</span></li>
+                        <li><span style="font-size:X-large">Context Aware</span></li>
+                        <li><span style="font-size:X-large">Multimodal Deep-learning</span></li>
+                        <li><span style="font-size:X-large">Intelligent Security</span></li>
+                    </ul>
                 </div>
                 <div class="row text-center">
                     <div class="container">
