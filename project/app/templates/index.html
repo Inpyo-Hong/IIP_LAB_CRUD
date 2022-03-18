@@ -1,1131 +1,776 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <meta content="yes" name="apple-mobile-web-app-capable" />
-    <meta content="minimum-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no" name="viewport" />
-    <title>IIP Lab - Intelligent Information Processing Lab</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    <!-- Font Awesome icons (free version)-->
-    <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
-    <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel="stylesheet"
-        type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles" rel="stylesheet" />
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css'%}">
-    <style>
-        * {margin:0;padding:0;}
-        /* INPUT 가리기 */
-        .lsection input[id*="slide"] {display:none;}
-
-        /* 슬라이드 영역 - max-width 크기를 조절해주면 됩니다*/
-        .lsection .slidewrap {max-width:1200px;margin: 0 auto;overflow:hidden;}
-        .lsection .slidelist {white-space:nowrap;font-size:0;}
-        .lsection .slidelist > li {display:inline-block;vertical-align:middle;width:100%;transition:all .5s;}
-        .lsection .slidelist > li > a {display:block;position:relative;overflow:hidden;} /* 화살표 화면 밖으로 나가면 안보이도록 OVERFLOW로 가림처리 */
-        .lsection .slidelist > li > a img {width:100%;}
-        
-        /* 좌우로 넘기는 LABEL버튼에 대한 스타일 */
-        .lsection .slidelist label {position:absolute;z-index:1;top:50%;transform:translateY(-50%);padding:50px;cursor:pointer;}
-        .lsection .slidelist .left {left:-300px; background:url('../static/img/left.png') center center / 100% no-repeat;} /* LEFT -300px로 화살표가 안보이게 되어있도록 준 스타일 */
-        .lsection .slidelist .right {right:-300px;background:url('../static/img/right.png') center center/100% no-repeat;} /* RIGHT -300px로 화살표가 안보이게 되어있도록 준 스타일 */
-
-        /* INPUT이 체크되면 변화값이 li까지 전달되는 스타일 */
-        .lsection input[id="slide01"]:checked ~ .slidewrap .slidelist > li {transform:translateX(0%);}
-        .lsection input[id="slide02"]:checked ~ .slidewrap .slidelist > li {transform:translateX(-100%);}
-        .lsection input[id="slide03"]:checked ~ .slidewrap .slidelist > li {transform:translateX(-200%);}
-
-        /* INPUT이 체크되면 변화값이 LEFT,RIGHT에 전달되는 스타일 */
-        .lsection input[id="slide01"]:checked ~ .slidewrap li:nth-child(1) .left {left:30px;transition:all .35s ease .5s;} /* 1번 INPUT이 체크되면 1번 슬라이드의 왼쪽 화살표의 LEFT값이 변하면서 나타나도록 준 스타일 */
-        .lsection input[id="slide01"]:checked ~ .slidewrap li:nth-child(1) .right {right:30px;transition:all .35s ease .5s;} /* 1번 INPUT이 체크되면 1번 슬라이드의 오른쪽 화살표의 LEFT값이 변하면서 나타나도록 준 스타일 */
-        .lsection input[id="slide02"]:checked ~ .slidewrap li:nth-child(2) .left {left:30px;transition:all .35s ease .5s;} /* 2번 INPUT이 체크되면 1번 슬라이드의 왼쪽 화살표의 LEFT값이 변하면서 나타나도록 준 스타일 */
-        .lsection input[id="slide02"]:checked ~ .slidewrap li:nth-child(2) .right {right:30px;transition:all .35s ease .5s;} /* 2번 INPUT이 체크되면 1번 슬라이드의 오른쪽 화살표의 LEFT값이 변하면서 나타나도록 준 스타일 */
-        .lsection input[id="slide03"]:checked ~ .slidewrap li:nth-child(3) .left {left:30px;transition:all .35s ease .5s;} /* 3번 INPUT이 체크되면 1번 슬라이드의 왼쪽 화살표의 LEFT값이 변하면서 나타나도록 준 스타일 */
-        .lsection input[id="slide03"]:checked ~ .slidewrap li:nth-child(3) .right {right:30px;transition:all .35s ease .5s;} /* 3번 INPUT이 체크되면 1번 슬라이드의 오른쪽 화살표의 LEFT값이 변하면서 나타나도록 준 스타일 */
-        input::placeholder {color:rgb(0, 0, 0);}
-        input::-webkit-input-placeholder {color:rgb(0, 0, 0);}
-        input:-ms-input-placeholder {color:rgb(0, 0, 0);}
-    </style>
-    <link rel="icon" type="img/png" href="../static/img/nav_logo.png">
-</head>
-
-<body id="page-top" style="font-family:noto-demilight;">
-    
-    <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-pastel fixed-top" id="mainNav" style="background-color: #ffffff;font-family: noto-medium;">
-        <div class="container">
-            <button style="background-color: black;" class="navbar-toggler navbar-toggler-right" type="button"
-                data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
-                aria-expanded="false" aria-label="Toggle navigation">
-                Menu
-                <i class="fas fa-bars ml-1"></i>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive" style="color: black;">
-                <ul class="navbar-nav text-uppercase ml-auto">
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#home" style="color:black;text-decoration: none;">home</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger"
-                            href="#scie_publications" style="color:black;text-decoration: none;">SCIE&nbspPUBLICATIONS</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger"
-                            href="#research_projects" style="color:black;text-decoration: none;">Research&nbspProjects</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#members" style="color:black;text-decoration: none;">Members</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" style="color:black;text-decoration: none;"
-                            href="#awards">Awards&nbsp&&nbspHonors</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" style="color:black;text-decoration: none;"href="#contact">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" style="color:black;text-decoration: none;"href="/board">Research</a></li>
-                </ul>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <meta content="yes" name="apple-mobile-web-app-capable" />
+        <meta content="minimum-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no" name="viewport" />
+        <title>IIP Lab - Intelligent Information Processing Lab</title>
+        <link rel="icon" type="image/x-icon" href="favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles" rel="stylesheet" />
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/styles.css'%}">
+        <link rel="icon" type="img/png" href="../static/img/nav_logo.png">
+    </head>
+    <body id="page-top" style="font-family: noto-demilight;">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color: black;">
+            <div class="container">
+                <button style="background-color: black;"
+                class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars ml-1"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav text-uppercase ml-auto">
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#home">home</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#scie_publications">SCIE&nbspPUBLICATIONS</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#research_projects">Research&nbspProjects</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#members">Members</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#awards">Awards&nbsp&&nbspHonors</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contact</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'login' %}">Research</a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
-    <!-- Home -->
-
-    <div>
-
-    </div>
-    <section class="page-section" id="home" style="background-color: #ffffff;">
-        <div class="" style="width: 100%; height: 20em;background-image: url(../static/img/new_background.png);">
-            <div class="container" style="height: 10em; padding-top:70px;">
-               <h1 style="font-family:HoengseongHanu; font-size:4em;">IIP LAB</h1>
-            </div>
-            <div class="container" style="height: 10em; padding-top:30px;">
-                <h3 style="font-family:HoengseongHanu ;">Intelligent Information Processing Lab</h3>
-            </div>
-            <!-- <div class="row text-center">
-                <div class="container">
-                    <a style="color: white; background-color: #222222; border: 6px solid #f8f9fa; border-radius: 20px;"
+        </nav>
+        <!-- Home -->
+        <section class="page-section" id="home" style="background-color: #222222;">
+            <div class="container">
+                <div class="text-center">
+                    <img src="{% static 'img/logo.png'%}" style="width: 100%;">
+                    <h3 class="section-subheading text-muted"></h3>
+                </div>
+                <div class="row text-center">
+                    <div class="container">
+                        <a style="color: white; background-color: #222222; border: 6px solid #f8f9fa; border-radius: 20px;"
                         onmouseout="this.style.backgroundColor='#222222'; this.style.color='white'"
                         onmouseover="this.style.backgroundColor='black'; this.style.color='white'"
                         class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#contact">Contact Us</a>
+                    </div>
                 </div>
-            </div>  -->
-        </div>
-    </section>
-    <!--photo & Description-->
-    <section class="page-section" style="margin-top:-6em;" >
-        <div class="container" style="height: 15em; display:block;background-color: white;">
-            <h3 class="section-heading text-uppercase"style="text-align:left;">Welcome to IIP Lab!</h3>
-            <p style="margin-top: 30px; font-size:large">
-                The IIP Lab at Gachon University is led by Prof. Chang Choi.<br>
-                We mainly focus on developing Artificial Intelligence such as 
-                computer vision, natural language processing, context aware, network, 
-                data processing, knowledge ontology, reinforcement learning, AI security, etc.<br>
-                We are looking for undergraduate or graduate students to work on 
-                research projects in AI and Intelligent Security. <br>Please feel free to contact me by e-mail via changchoi AT gachon.ac.kr
-            </p>
-        </div>
-        <!-- <div class="row text-center" style="margin-top: 20px;">
+            </div>
+        </section>
+        <!-- SCIE Publications -->
+        <section class="page-section bg-light" id="scie_publications">
             <div class="container">
-                <a style="color: black; background-color: #ffffff; border: 6px solid #9ccbe5; border-radius: 20px;"
-                    onmouseout="this.style.backgroundColor='#ffffff'; this.style.color='black'"
-                    onmouseover="this.style.backgroundColor='#9ccbe5'; this.style.color='white'"
-                    class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#contact">Contact Us</a>
-            </div>
-        </div>  -->
-
-        <div class="container" style="display: block; padding-top:80px;">
-            <div class="inline-block" style="width: 33%; height:35em;">
-                <img src="{% static 'img/vision.png'%}" style="width: 50%; height:40%; margin-right:120px">
-                <h3 style="text-align: left; margin-top:10px">Deep-Learning for Computer Vision</h3>
-                <div style="display: block; width:90%; font-family:sans-serif; margin-top:30px;">
-                    <ul style="text-align: left; display:block;">
-                        <li><span style="font-size:X-large">Image Captioning</span></li>
-                        <li><span style="font-size:X-large">Data Augmentation</span></li>
-                        <li><span style="font-size:X-large">Adversarial Attack</span></li>
-                        <li><span style="font-size:X-large">Object Detection</span></li>
-                    </ul>
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">scie publications</h2>
+                    <h3 class="section-subheading text-muted">IIP Lab SCIE Publications</h3>
                 </div>
+                <details open>
+                    <summary>Revision and submitted paper</summary>
+                </details>
+                <details open>
+                    <summary>Accepted or Online Published paper</summary>
+                    <p>[71] Xin Su, Inam Ullah, Meiling Wang and Chang Choi*, “Blockchain-Based System and Methods for Sensitive Data Transactions", IEEE Consumer Electronics Magazine, Online Published (2019 JCR IF: 4.016)</p>
+                    <p>[70] Wei Li, Guanxi Shen, Jingfang Zhang and Chang Choi*, “A LoRaWAN Monitoring System for Large Buildings Based on Embedded Edge Computing in Indoor Environment", Concurrency and Computation Practice and Experience, Online Published, 2021 (2019 JCR IF: 1.447)</p>
+                </details>
+                <details open>
+                    <summary>2022</summary>
+                    <p>[69] Guangjie Han, Juntao Tu, Li Liu, Miguel Martinez-Garcia and Chang Choi, "An Intelligent Signal Processing Data Denoising Method for Control Systems Protection in the Industrial Internet of Things", IEEE Transactions on Industrial Informatics, vol. 18, issue 4, pp 2684-2692, Apr 2022 (2019 JCR IF: 9.112) - Top 3% Journal</p>
+                </details>
+                <details>
+                    <summary>2021</summary>
+                    <p>[68] Ning Lu,,Xin Su, Chang Choi*, Tianlong Fei, and Wenbo Shi,"BEvote: Bitcoin-Enabled E-Voting Scheme with Anonymity and Robustness", Security and Communication Networks, Vol. 2021,  Dec 2021 (2020 JCR IF: 1.791)</p>
+                    <p>[67] Vinay Arora, Karun Verma, Rohan Singh Leekha, Kyungroul Lee, Chang Choi*, Takshi Gupta and Kashish Bhatia, "Transfer Learning Model to Indicate Heart Health Status Using Phonocardiogram", CMC-Computers, Materials & Continua, Accepted (2019 JCR IF: 4.890)</p>
+                    <p>[66] Sita Rani, Aman Kataria, Vishal Sharma, Smarajit Ghosh, Vinod Karar, Kyungroul Lee and Chang Choi, "Threats and Corrective Measures for IoT Security with Observance of Cybercrime: A Survey", Wireless Communications and Mobile Computing, vol. 2021, Article ID 5579148, pp. 1-30, Apr 2021 (2019 JCR IF: 1.819)</p>
+                    <p>[65] Chang Choi, Tian Wang, Christian Esposito, Brij Bhooshan Gupta and Kyungroul Lee, "Sensored Semantic Annotation for Traffic Control based on Knowledge Inference in Video", IEEE Sensors, vol. 21, issue 10, pp. 11758-11768, May 2021 (2019 JCR IF: 3.073)</p>
+                    <p>[64] Kyungroul Lee, Jaehyuk Lee, Chang Choi and Kangbin Yim, "Offensive Security of Keyboard Data using Machine Learning for Password Authentication in IoT", IEEE Access, vol. 9, pp. 10925-10939, Jan 2021 (2019 JCR IF: 3.745)</p>
+                    <p>[63] Tian Wang, Jiakun Li, Mengyi Zhang, Aichun Zhu, Hichem Snoussi and Chang Choi*, “An Enhanced 3DCNN-ConvLSTM for Spatio-temporal Multimedia Data Analysis", Concurrency and Computation Practice and Experience, vol. 33, issue 2, pp. 1-9, Jan 2021 (2019 JCR IF: 1.447)</p>
+                </details>
+                <details>
+                    <summary>2020</summary>
+                    <p>[62] Christian Esposito, Oscar Tamburis, Xin Su and Chang Choi*, “Robust Decentralised Trust Management for the Internet of Things by Using Game Theory", Information Processing and Management, vol.57, issue 6, pp. 1-16, Nov 2020 (2019 JCR IF: 4.787)</p>
+                    <p>[61] Chang Choi, Florin Pop and Jun Huang,  “Novel Data Mining Paradigms based on Soft Computing and Machine Learning in the current and upcoming Information Society Revolution", Concurrency and Computation Practice and Experience, pp. 1-3, Sep 2020 (2019 JCR IF: 1.447)</p>
+                    <p>[60] Xin Su, Yiming Liu and Chang Choi*, “A Blockchain-based P2P Transaction Method and Sensitive Data Encoding for E-Commerce Transactions", IEEE Consumer Electronics Magazine, vol. 9, issue 4, pp. 56-66, Jul 2020 (2019 JCR IF: 4.016)</p>
+                    <p>[59] Chang Choi, Gianni D’Angelo and Francesco Palmieri, "Special Issue on Intelligent Systems in Sensor Networks and Internet of Things ", Sensors, vol. 20, no. 11, pp. 1-3, Jun 2020 (2019 JCR IF: 3.275)</p>
+                    <p>[58] Xin Su, Pascal Nkurunziza, Junrong Gu, Aniello Castiglione and Chang Choi*, “Inter-beam Interference Cancellation and Physical Layer Security Constraints by 3D Polarized Beamforming in Power Domain NOMA Systems”, IEEE Transactions on Sustainable Computing, vol. 5, issue 2, pp. 291-303, April-June 2020</p>
+                    <p>[57] Yupeng Wang, Jianfeng Jin, Yufeng Li and Chang Choi*, “A Reliable Physical Layer Authentication Algorithm for Massive IoT Systems", IEEE Access, vol. 8, pp 80684-80690, Apr 2020 (2019 JCR IF: 3.745)</p>
+                    <p>[56] Zengpeng Li , Jiuru Wang, Chang Choi and Wenyin Zhang, "Multi-Factor Password-Authenticated Key Exchange via Pythia PRF Service", CMC-Computers Materials & Continua, vol. 63, no. 2, pp. 663-674, May 2020 (2019 JCR IF: 4.890)</p>
+                    <p>[55] Byeongho Jung, Seongil Bae, Chang Choi and Eulgyu Im, "Packer Identification Method Based on Byte Sequences", Concurrency and Computation Practice and Experience, vol. 32, issue 8, pp. 1-10, Apr 2020 (2019 JCR IF: 1.447)</p>
+                    <p>[54] Mingu Kim, Chang Choi and Sungbum Pan, "Ensemble Networks for User Recognition in Various Situations based on Electrocardiogram", IEEE Access, vol. 8, issue 1, pp. 36527-36525, Mar 2020 (2019 JCR IF: 3.745)</p>
+                    <p>[53] Haoxiang Wang, Zhihui Li, Yang Li, B.B. Gupta and Chang Choi*, "Visual Saliency Guided Complex Image Retrieval", Pattern Recognition Letters, vol.130, pp. 64-72, Feb 2020 (2019 JCR IF: 3.255)</p>
+                    <p>[52] Tingting Zhang, Jinwei Xie, Xu Zhou and Chang Choi*, "The effects of depth of field on subjective evaluation of aesthetic appeal and image quality of photographs", IEEE Access, vol. 8, issue 1, pp. 13467-13475, Jan 2020 (2019 JCR IF: 3.745)</p>
+                    <p>[51] Inam Ullah, Yu Shen, Xin Su, Christian Esposito and Chang Choi*, "A Localization based on Unscented Kalman Filter and Particle Filter Localization Algorithms", IEEE Access, vol. 8, pp. 2233-2246, Jan 2020 (2019 JCR IF: 3.745)</p>
+                    <p>[50] Chang Choi, Francesco Piccialli and Jason J. Jung , “Internet of Knowledge", Future Generation Computer Systems,  vol. 102, pp. 948-949, Jan 2020 (2019 JCR IF: 6.013) - Top 7% Journal</p>
+                    <p>[49] Yupeng Wang,  Tianlong Liu, Chang Choi* and Haoxiang Wang, "Green Resource Allocation Method for Intelligent Medical Treatment Oriented Service in a 5G Mobile Network", Concurrency and Computation: Practice and Experience, vol. 32, issue 1, pp. 1-10, Jan 2020 (2019 JCR IF: 1.447)</p>
+                </details>
+                <details>
+                    <summary>2019</summary>
+                    <p>[48] Chang Choi, Francesco Palmieri, Juw Won Park and Hsing-Chung Chen, "Guest Editorial: Soft Computing Applications for Novel and Upcoming Distributed and Parallel Systems, from Cloud Computing and Beyond", IEEE Transactions on Industrial Informatics, vol. 15 issue 10, pp. 5646-5647, Oct 2019 (2019 JCR IF: 9.112) - Top 3% Journal</p>
+                    <p>[47] Chang Choi and Junho Choi, "Ontology-based Security Context Reasoning for Power IoT-Cloud Security Service", IEEE Access, vol. 7, issue 1, pp. 110510-110517, Aug 2019 (2019 JCR IF: 3.745)</p>
+                    <p>[46] James Adu Ansere, Guangjie Han, Hao Wang, Chang Choi and Celimuge Wu, "A Reliable Energy Efficient Dynamic Spectrum Sensing for Cognitive Radio IoT Networks", IEEE Internet of Things Journal, vol. 6, no. 4, pp. 6748-6759, Aug 2019 (2019 JCR IF: 9.936) - Top 2% Journal</p>
+                    <p>[45]  Xin Su, Giancarlo Sperlì, Vincenzo Moscato, Antonio Picariello, Christian Esposito and Chang Choi*, “An Edge Intelligence Empowered Recommender System enabling Cultural Heritage applications", IEEE Transactions on Industrial Informatics, vol. 15, issue 7, pp. 4266-4275, Jul 2019 (2019 JCR IF: 9.112) - Top 3% Journal</p>
+                    <p>[44] Chang Choi, Christian Esposito, Munque Lee and Junho Choi, “Metamorphic Malicious Code Behavior Detection Using Probabilistic Inference Methods", Cognitive Systems Research, vol. 56, pp. 142-150, Aug 2019 (2019 JCR IF: 1.902)</p>
+                    <p>[43] Tian Wang, Meina Qiao, Zhiwei Lin, Ce Li, Hichem Snoussi, Zhe Liu and Chang Choi*, “Generative Neural Networks for Anomaly Detection in Crowded Scenes", IEEE Transactions on Information Forensics and Security, vol. 14, issue 5, pp. 1390-1399, May 2019 (2019 JCR IF: 6.013) - Top 8% Journal</p>
+                    <p>[42] Inam Ullah, Jingyi Chen, Xin Su, Christian Esposito and Chang Choi*, “Localization and Detection of Targets in Underwater Wireless Sensor Using Distance and Angle Based Algorithms", IEEE Access, vol. 7, pp. 45693-45704, Apr 2019 (2019 JCR IF: 3.745)</p>
+                    <p>[41] Daming Li, Lianbing Deng, Brij Bhooshan Gupta, Haoxiang Wang and Chang Choi*, “A Novel CNN based Security Guaranteed Image Watermarking Generation Scenario for Smart City Applications”, Information Sciences, vol. 479, pp. 432-447, Apr 2019 (2019 JCR IF: 5.910) - Top 5% Journal</p>
+                    <p>[40] Ilsun You, Chang Choi, Vishal Sharma, Isaac Woungang and Bharat K. Bhargava, "Guest Editorial: Advances In Security and Privacy Technologies for Forthcoming Smart Systems, Services, Computing, and Networks", Intelligent Automation And Soft Computing, vol. 25, no. 1, pp. 117-119, Mar 2019 (2019 JCR IF: 1.276)</p>
+                    <p>[39] Zengpeng Li*, Chunguang Ma*, Minghao Zhao and Chang Choi*, “Efficient oblivious transfer construction via multiple bits dual-mode cryptosystem for secure selection in the cloud", Journal of the Chinese Institute of Engineers, vol. 42, issue 1, pp. 97-106, Feb 2019 (2019 JCR IF: 0.667)</p>
+                    <p>[38] Tian Wang, Ruoxi Qin, Yang Chen, Hichem Snoussi and  Chang Choi*, “A Reinforcement Learning Approach for UAV Target Searching and Tracking", Multimedia Tools and Applications, vol. 78, issue 4, pp. 4347-4364, Feb 2019 (2019 JCR IF: 2.313)</p>
+                    <p>[37] Yupeng Wang, Zelong Yu, Jun Huang and  Chang Choi*, “A Novel Energy Efficient Neighbor Discovery Procedure in a Wireless Self-organization Network", Information Sciences, vol. 476, pp. 429-438, Feb 2019 (2019 JCR IF: 5.910) - Top 5% Journal</p>
+                </details>
+                <details>
+                    <summary>2018</summary>
+                    <p>[36] Christian Esposito, Xin Su, Shadi Aljawarneh and Chang Choi*, “Securing Collaborative Deep Learning in Industrial Applications within Adversarial Scenarios", IEEE Transactions on Industrial Informatics, vol 14, issue 11, pp. 4972-4981, Nov 2018 (2019 JCR IF: 9.112) - Top 3% Journal</p>
+                    <p>[35] Guofang Dong, Pu Sun, Wenbo Shi and Chang Choi*,  “A Novel Valuation Pruning Optimization Fuzzing Test Model Based on Mutation Tree for Industrial Control Systems", Applied Soft Computing, vol. 70, pp. 896-902, Sep 2018  (2019 JCR IF: 5.472) - Top 8% Journal</p>
+                    <p>[34] Xin Su, Leilei Meng, Ziyu Wang, Chunsai Dui and Chang Choi*, “Fine-grained Big Traffic Data Reverse-charge System: A Method of Saving Expenses", Mobile Networks and Applications, vol. 23, issue 4, pp. 1082-1088, Aug 2018 (2019 JCR IF: 2.602)</p>
+                    <p>[33] Ion-Dorinel Filip, Florin Pop, Cristina Serbanescu, Chang Choi, "Microservices Scheduling Model over Heterogeneous Cloud-Edge Environments as Support for IoT Applications", IEEE Internet of Things Journal, vol. 5, issue 4, pp. 2672-2681, Aug 2018 (2019 JCR IF: 9.936) - Top 2% Journal</p>
+                    <p>[32] Chang Choi, Marek R. Ogiela and Christian Esposito, "Editorial Note: Semantic Approaches for Multimedia Retrieval Applications", Multimedia Tools and Applications, vol. 77, issue 14, pp 18527-18527, Jul 2018 (2019 JCR IF: 2.313)</p>
+                    <p>[31] Chang Choi, Christian Esposito, Haoxiang Wang, Zhe Liu and Junho Choi, “Intelligent Power Equipment Management based on Distributed Context-Aware Inference in Smart Cities", IEEE Communications Magazine, vol. 56, no. 7, pp.212-217, Jul 2018  (2019 JCR IF: 11.052)- Top 2% Journal</p>
+                    <p>[30] Xin Su, Aniello Castiglione, Christian Esposito and Chang Choi*, “Power Domain NOMA to Support Group Communication in Public Safety Networks”, Future Generation Computer Systems,  vol. 84, pp. 228-238, Jul 2018 (2019 JCR IF: 6.125) - Top 7% Journal</p>
+                    <p>[29] Chang Choi, Chulwoong Choi, Junho Choi and Pankoo Kim, "Improved Performance Optimization for Massive Small Files in Cloud Computing Environment", Annals of Operations Research, vol. 265, issue 2, pp. 305-317, Jun 2018 (2019 JCR IF: 2.583)</p>
+                    <p>[28] Htet Myet Lynn, Chang Choi and Pankoo Kim, "An Improved Method of Automatic Text Summarization for Web Contents using Lexical Chain with Semantic Related Terms", Soft Computing, vol. 22, issue 12, pp. 4013-4023, Jun 2018 (2019 JCR IF: 3.050)</p>
+                    <p>[27] Xin Su, Ziyu Wang, and Xiaofeng Liu, Chang Choi and Dongmin Choi, "Study to Improve Security for IoT Smart Device Controller: Drawbacks and Countermeasures", Security and Communication Networks, vol. 2018, Article ID 4296934, Jun 2018 (2019 JCR IF: 1.288)</p>
+                    <p>[26] Yuan Gao, Zhixiang Deng, Dongmin Choi and Chang Choi*, “Combined Pre-detection and Sleeping for Energy-efficient Spectrum Sensing in Cognitive Radio Networks”, Journal of Parallel and Distributed Computing, vol. 114, pp. 85-94, Apr 2018 (2019 JCR IF : 2.296)</p>
+                    <p>[25] YuPeng Wang, Xin Dai, Jason J. Jung and Chang Choi*, “Performance Analysis of Smart Cultural Heritage Protection Oriented Wireless Networks”, Future Generation Computer Systems, vol. 81, pp. 593-600, Apr 2018 (2019 JCR IF: 6.125) - Top 7% Journal</p>
+                    <p>[24] Xiaoyu Lan, Lening Wang, Yupeng Wang, Chang Choi and Dongmin Choi, "Tensor 2D DOA Estimation for Cylindrical Conformal antenna Array in Massive MIMO System under Unknown Mutual Coupling", IEEE Access, vol. 6, issue 1, pp. 7864-7871, Mar 2018 (2019 JCR IF: 3.745)</p>
+                    <p>[23] Chang Choi, Marek R. Ogiela and Hsing-Chung Chen, “Intelligent Approaches for Security Technologies", Concurrency and Computation: Practice and Experience, vol 30, issue 3, Feb 2018 (2019 JCR IF: 1.447)</p>
+                    <p>[22] Taekeun Hong, Chang Choi, Juhyun Shin, "CNN-based malicious user detection in social networks", Concurrency and Computation Practice and Experience, vol.30, issue 2, pp. 1-10, Jan 2018 (2019 JCR IF: 1.447)</p>
+                </details>
+                <details>
+                    <summary>2017</summary>
+                    <p>[21] Xin Su, Yang Wang, Dongmin Choi, Pankoo Kim and Chang Choi*, “Channel Allocation and Power Control Schemes for Cross-tier 3GPP LTE Networks to Support Multimedia Applications”, Multimedia Tools and Applications, vol. 76, issue 24, pp. 25875-25891, Dec 2017 (2019 JCR IF: 2.313)</p>
+                    <p>[20] Christian Esposito and Chang Choi*, “Signaling game based strategy for secure positioning in wireless sensor networks”, Pervasive and Mobile Computing, vol. 40, pp. 611-627, Sep 2017 (2019 JCR IF: 2.725)</p>
+                    <p>[19] Eunji Lee, Chang Choi and Pankoo Kim, "Intelligent Handover Scheme for Drone Using Fuzzy Inference Systems",IEEE Access, vol. 5, pp. 13712-13719, Aug 2017 (2019 JCR IF: 3.745)</p>
+                    <p>[18] Chang Choi, Junho Choi and Pankoo Kim, "Abnormal behavior pattern mining for unknown threat detection", Computer Systems Science & Engineering, vol. 32, no. 2, pp. 171-177, Mar 2017 (2019 JCR IF: 0.278)</p>
+                </details>
+                <details>
+                    <summary>2016</summary>
+                    <p>[17] Yupeng Wang, Xin Su, Dongmin Choi and Chang Choi*, “Coordinated Scheduling Algorithm for System Utility Maximization with Heterogeneous QoS Requirements in Wireless Relay Networks”, IEEE Access, vol. 4, issue 1, pp. 8351-8361, Dec 2016 (2019 JCR IF: 3.745)</p>
+                    <p>[16] Xin Su, HaiFeng Yu, Wansoo Kim, Chang Choi and Dongmin Choi, “Interference cancellation for non-orthogonal multiple access used in future wireless mobile networks”, EURASIP Journal on Wireless Communications and Networking, vol 2016, Dec 2016 (2019 JCR IF: 1.408)</p>
+                    <p>[15] Xin Su, Chengchao Liang, Dongmin Choi and Chang Choi*, “Power Allocation Scheme for Femto-to-Macro Downlink Interference Reduction for Smart Devices in Ambient Intelligence”, Mobile Information Systems, vol. 2016, article ID 7172515, Dec 2016 (2019 JCR IF: 1.508)</p>
+                    <p>[14] Ilsun You, Jaedeok Lim, Jeongnyeo Kim, Hyobeom Ahn and Chang Choi*, "Adaptive authentication scheme for mobile devices in proxy MIPv6 networks", IET Communications, vol. 10, issue 17, pp. 2319-2327, Nov. 2016 (2019 JCR IF: 1.664)</p>
+                    <p>[13] Junho Choi, Chang Choi, Hoon Ko and Pankoo Kim, “Intelligent Healthcare Service using Health Lifelog Analysis”, Journal of Medical Systems, vol. 40, issue. 8, article no. 188, Aug 2016 (2019 JCR IF: 3.058) </p>
+                </details>
+                <details>
+                    <summary>2015</summary>
+                    <p>[12] Junho Choi, Woon Sung, Chang Choi and Pankoo Kim, “Personal information leakage detection method using the inference-based access control model on the Android platform”, Pervasive and Mobile Computing, vol. 24, pp. 138-149, Dec 2015 (2019 JCR IF: 2.769)</p>
+                    <p>[11] Junho Choi, Chang Choi, Ilsun You and Pankoo Kim, “Polymorphic Malicious JavaScript Code Detection for APT Attack Defense”, Journal of Universal Computer Science, vol. 21, no. 3, pp. 369-383, Mar 2015 (2019 JCR IF: 0.701)</p>
+                </details>
+                <details>
+                    <summary>2014</summary>
+                    <p>[10] Ilsun You, Junho Choi, Chang Choi, and Pankoo Kim, “Intelligent Healthcare Service Based on Context Inference Using Smart Device”, Soft Computing, vol. 18, no. 12, pp. 2577-2586, Dec 2014 (2019 JCR IF: 3.050)</p>
+                    <p>[9] Junho Choi, Chang Choi, Byeongkyu Ko and Pankoo Kim, “A Method of DDoS Attack Detection using HTTP Packet Pattern and Rule Engine in Cloud Computing Environment”, Soft Computing, vol. 18, no. 9, pp. 1697-1703, Sep 2014 (2019 JCR IF: 3.050)</p>
+                    <p>[8] Chang Choi, Junho Choi and Pankoo Kim, “Ontology based Access Control Model for Security Policy Reasoning in Cloud Computing”, Journal of Supercomputing, vol. 67, issues 3, pp. 711-722, Mar 2014 (2019 JCR IF: 2.469)</p>
+                </details>
+                <details>
+                    <summary>2013</summary>
+                    <p>[7] Chang Choi, Junho Choi, Eunji Lee, Ilsun You and Pankoo Kim, “Probabilistic Spatio-Temporal Inference for Motion Event Understanding”, Neurocomputing, vol. 122, pp. 24-32, Dec. 2013 (2019 JCR IF: 4.438)</p>
+                    <p>[6] Junho Choi, Chang Choi, Kangbin Yim, Jeongnyeo Kim and Pankoo Kim, “Intelligent Reconfigurable Method of Cloud Computing Resources for Multimedia Data Delivery”, INFORMATICA, vol. 24, no. 3, pp. 381-394, Sep. 2013 (2019 JCR IF : 3.312) - Top 3% Journal</p>
+                </details>
+                <details>
+                    <summary>2012</summary>
+                    <p>[5] Junho Choi, Chang Choi, Dongjin Choi, Jungin Kim and Pankoo Kim, “Automatic Extraction of Semantic Concept-Relation Triple Pattern from Wikipedia Articles”, INFORMATION : An International Interdisciplinary Journal, vol. 15, no. 7, pp. 2755-2770, Jul 2012 (2012 JCR IF: 0.358)</p>
+                    <p>[4] Chang Choi, Junho Choi, Juhyun Shin, Sung-Ryul Kim and Pankoo Kim, “Semantic Representation of Motion for Tracing Object in Surveillance System”, Journal of Internet Technology, vol. 13, no. 4, pp. 621-630, Jul 2012 (2019 JCR IF: 0.786)</p>
+                    <p>[3] Junho Choi, Chang Choi, Byeong-kyu Ko and Pankoo Kim, “Detection of Cross Site Scripting Attack in Wireless Networks using n-Gram and SVM”, Mobile Information Systems, vol. 8, pp. 275-286, Jun 2012 (2019 JCR IF: 1.508)</p>
+                </details>
+                <details>
+                    <summary>2011</summary>
+                    <p>[2] Myunggwon Hwang, Chang Choi, Pankoo Kim, “Automatic Enrichment of Semantic Relation Network and its Application to Word Sense Disambiguation”, IEEE Transactions on Knowledge and Data Engineering, vol. 23, no. 6, pp. 845-858, Jun 2011 (2019 JCR IF: 4.935)</p>
+                    <p>[1] Chang Choi, Myunggwon Hwang, Dongjin Choi, Junho Choi and Pankoo Kim, “Automatic Document Tagging using Online Knowledge Base”, INFORMATION : An International Interdisciplinary Journal, vol. 14, no. 5, pp. 1709-1720, May 2011 (2012 JCR IF: 0.358)</p>
+                </details>
             </div>
-            <div class="inline-block" style="width: 33%; height:35em; margin-left:10px;">
-                <img src="{% static 'img/timeseries.png'%}" style="width: 50%; height:40%;margin-right:80px">
-                <h3 style="text-align: left; margin-top:10px">Time Series <br> Processing & Analysis</h3>
-                <div style="display: block; width:90%; font-family:sans-serif; margin-top:30px;">
-                    <ul style="text-align: left; display:block;">
-                        <li><span style="font-size:X-large">Natual Language Processing</span></li>
-                        <li><span style="font-size:X-large">Time-series Processing</span></li>
-                        <li><span style="font-size:X-large">Spatio-temporal Analysis</span></li>
-                        <li><span style="font-size:X-large">Bio Data Predicting</span></li>
-                    </ul>
+        </section>
+        <!-- Research Projects-->
+        <section class="page-section" id="research_projects">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">research projects</h2>
+                    <h3 class="section-subheading text-muted">IIP Lab Research Projects</h3>
                 </div>
+                <ul class="timeline">
+                    <li class="timeline-inverted">
+                        <div class="timeline-image" style="background-color: #f8f9fa"><img class="rounded-circle img-fluid" src="{% static 'img/NRF.png' %}" alt="" /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4>2021.09 - 2025.09</h4>
+                                <h4 class="subheading">NRF</h4>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">Development of a highly reliable multi-bio-certification system based on knowledge Inference and deep learning for robust security certification</p></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-image" style="background-color: #f8f9fa"><img class="rounded-circle img-fluid" src="{% static 'img/NSSC.jpg' %}" alt="" /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4>2021.04 - 2026.12</h4>
+                                <h4 class="subheading">NSSC</h4>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">Development of quanitive risk assessment model for nuclear power sabotage according to cyber attack</p></div>
+                        </div>
+                    </li>
+                    <li class="timeline-inverted">
+                        <div class="timeline-image" style="background-color: #f8f9fa"><img class="rounded-circle img-fluid" src="{% static 'img/NRF.png' %}" alt="" /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4>2020.12 - 2021.11</h4>
+                                <h4 class="subheading">NRF</h4>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">K-EU research group organize for Research on Massive Deployment and Big Data oriented Intelligent Security Mechanism in IoT</p></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-image" style="background-color: #f8f9fa"><img class="rounded-circle img-fluid" src="{% static 'img/BK21.PNG' %}" alt="" /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4>2020.09 - 2027.08</h4>
+                                <h4 class="subheading">BK21</h4>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">FAST Artificial Intelligence Convergence</p></div>
+                        </div>
+                    </li>
+                    <li class="timeline-inverted">
+                        <div class="timeline-image" style="background-color: #f8f9fa"><img class="rounded-circle img-fluid" src="{% static 'img/IITP.jpg' %}" alt="" /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4>2020.07 - 2021.12</h4>
+                                <h4 class="subheading">IITP</h4>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">Development of Smart Signage Technology for Automatic Classification of Untact Examination and Patient Status Based on AI</p></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-image" style="background-color: #f8f9fa"><img class="rounded-circle img-fluid" src="{% static 'img/NRF.png' %}" alt="" /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4>2019.01 - 2021.12</h4>
+                                <h4 class="subheading">NRF</h4>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">Research on Key Technology for Real-Time Fault Diagnosis of Intelligent Production System Based on Industrial IoT</p></div>
+                        </div>
+                    </li>
+                    <li class="timeline-inverted">
+                        <div class="timeline-image" style="background-color: #f8f9fa"><img class="rounded-circle img-fluid" src="{% static 'img/NRF.png' %}" alt="" /></div>
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h4>2017.11 - 2021.10</h4>
+                                <h4 class="subheading">NRF</h4>
+                            </div>
+                            <div class="timeline-body"><p class="text-muted">Research on Intelligent Power Management Technology Based on Distributed Situation Awareness Inference in Smart City</p></div>
+                        </div>
+                    </li>
+                </ul>
             </div>
-            <div class="inline-block" style="width: 33%; height:35em; padding-left:20px;">
-                <img src="{% static 'img/ai.png'%}" style="width: 50%; height:40%;margin-right:100px">
-                <h3 style="text-align: left; margin-top:10px">Natural Language Processing</h3>
-                <div style="display: block; width:90%; font-family:sans-serif; margin-top:30px;">
-                    <ul style="text-align: left; display:block;">
-                        <li><span style="font-size:X-large">Knowledge Ontology</span></li>
-                        <li><span style="font-size:X-large">Context Aware</span></li>
-                        <li><span style="font-size:X-large">Multimodal Deep-learning</span></li>
-                        <li><span style="font-size:X-large">Intelligent Security</span></li>
-                    </ul>
+        </section>
+        <!-- Members-->
+        <section class="page-section bg-light" id="members">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Our Members</h2>
+                    <h3 class="section-subheading text-muted">IIP Lab Members</h3>
                 </div>
-            </div>
-
-        </div>
-        
-
-
-        <div class="container" style="display: block; padding-top:15px">   
-            
-            <div class="lsection" style="float: center;">
-                <input type="radio" name="slide" id="slide01"checked >
-                <input type="radio" name="slide" id="slide02">
-                <input type="radio" name="slide" id="slide03">
-                
-
-                <div class="slidewrap" style="float: center; width:100%" >
-                    <ul class="slidelist" >
-                        <li>
-                            <a>
-                                <label for="slide03" class="left"></label>
-                                <img src="{% static 'img/lab01.jpg' %}" width="100%">
-                                <label for="slide02" class="right"></label>
+                <div class="row">
+                    <div style="width: 100%;">
+                        <hr style="border: 3px solid #222222;">
+                        <h2 style="text-align: left; font-style: bold; color: #222222; padding-bottom: 40px;" class="section-subheading text-muted">Professor</h2>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="team-member">
+                            <a class="portfolio-link" href="https://sites.google.com/site/phdchangchoi/">
+                                <img class="mx-auto rounded-circle" src="{% static 'people/choi_chang.PNG' %}" alt="" />
                             </a>
-                        </li>
-                        <li>
-                            <a>
-                                <label for="slide01" class="left"></label>
-                                <img src="{% static 'img/lab02.jpg' %}" width="100%">
-                                <label for="slide03" class="right"></label>
+                            <h4>Chang Choi</h4>
+                            <p class="text-muted">Professor</p>
+                        </div>
+                    </div>
+                    <div style="width: 100%;">
+                        <hr style="border: 3px solid #222222;">
+                        <h2 style="text-align: left; font-style: bold; color: #222222; padding-bottom: 40px;" class="section-subheading text-muted">Researcher (Master)</h2>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="team-member">
+                            <a class="portfolio-link" data-toggle="modal" href="#sae_bom_lee_portfolio">
+                                <img class="mx-auto rounded-circle" src="{% static 'people/sae_bom_lee.PNG' %}" alt="" />
                             </a>
-                        </li>
-                        <li>
-                            <a>
-                                <label for="slide02" class="left"></label>
-                                <img src="{% static 'img/lab03.jpg' %}" width="100%">
-                                <label for="slide01" class="right"></label>
+                            <h4>Sae Bom Lee</h4>
+                            <p class="text-muted">Researcher (Master)</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="team-member">
+                            <a class="portfolio-link" data-toggle="modal" href="#nam_gyu_jung_portfolio">
+                                <img class="mx-auto rounded-circle" src="{% static 'people/nam_gyu_jung.jpg' %}" alt="" />
                             </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-                
-
-            
-        </div>
-
-    </section>
-    <!-- SCIE Publications -->
-    <section class="page-section" id="scie_publications" style="background-color:#f3fbfd;">
-        <div class="container">
-            <div class="text-center">
-                <h2 class="section-heading text-uppercase">scie publications</h2>
-                <h3 class="section-subheading text-muted">IIP Lab SCIE Publications</h3>
-            </div>
-            <details open>
-                <summary>Revision and submitted paper</summary>
-            </details>
-            <details open>
-                <summary>Accepted or Online Published paper</summary>
-                <p>[71] Xin Su, Inam Ullah, Meiling Wang and Chang Choi*, “Blockchain-Based System and Methods for
-                    Sensitive Data Transactions", IEEE Consumer Electronics Magazine, Online Published (2019 JCR IF:
-                    4.016)</p>
-                <p>[70] Wei Li, Guanxi Shen, Jingfang Zhang and Chang Choi*, “A LoRaWAN Monitoring System for Large
-                    Buildings Based on Embedded Edge Computing in Indoor Environment", Concurrency and Computation
-                    Practice and Experience, Online Published, 2021 (2019 JCR IF: 1.447)</p>
-            </details>
-            <details open>
-                <summary>2022</summary>
-                <p>[69] Guangjie Han, Juntao Tu, Li Liu, Miguel Martinez-Garcia and Chang Choi, "An Intelligent Signal
-                    Processing Data Denoising Method for Control Systems Protection in the Industrial Internet of
-                    Things", IEEE Transactions on Industrial Informatics, vol. 18, issue 4, pp 2684-2692, Apr 2022 (2019
-                    JCR IF: 9.112) - Top 3% Journal</p>
-            </details>
-            <details>
-                <summary>2021</summary>
-                <p>[68] Ning Lu,,Xin Su, Chang Choi*, Tianlong Fei, and Wenbo Shi,"BEvote: Bitcoin-Enabled E-Voting
-                    Scheme with Anonymity and Robustness", Security and Communication Networks, Vol. 2021, Dec 2021
-                    (2020 JCR IF: 1.791)</p>
-                <p>[67] Vinay Arora, Karun Verma, Rohan Singh Leekha, Kyungroul Lee, Chang Choi*, Takshi Gupta and
-                    Kashish Bhatia, "Transfer Learning Model to Indicate Heart Health Status Using Phonocardiogram",
-                    CMC-Computers, Materials & Continua, Accepted (2019 JCR IF: 4.890)</p>
-                <p>[66] Sita Rani, Aman Kataria, Vishal Sharma, Smarajit Ghosh, Vinod Karar, Kyungroul Lee and Chang
-                    Choi, "Threats and Corrective Measures for IoT Security with Observance of Cybercrime: A Survey",
-                    Wireless Communications and Mobile Computing, vol. 2021, Article ID 5579148, pp. 1-30, Apr 2021
-                    (2019 JCR IF: 1.819)</p>
-                <p>[65] Chang Choi, Tian Wang, Christian Esposito, Brij Bhooshan Gupta and Kyungroul Lee, "Sensored
-                    Semantic Annotation for Traffic Control based on Knowledge Inference in Video", IEEE Sensors, vol.
-                    21, issue 10, pp. 11758-11768, May 2021 (2019 JCR IF: 3.073)</p>
-                <p>[64] Kyungroul Lee, Jaehyuk Lee, Chang Choi and Kangbin Yim, "Offensive Security of Keyboard Data
-                    using Machine Learning for Password Authentication in IoT", IEEE Access, vol. 9, pp. 10925-10939,
-                    Jan 2021 (2019 JCR IF: 3.745)</p>
-                <p>[63] Tian Wang, Jiakun Li, Mengyi Zhang, Aichun Zhu, Hichem Snoussi and Chang Choi*, “An Enhanced
-                    3DCNN-ConvLSTM for Spatio-temporal Multimedia Data Analysis", Concurrency and Computation Practice
-                    and Experience, vol. 33, issue 2, pp. 1-9, Jan 2021 (2019 JCR IF: 1.447)</p>
-            </details>
-            <details>
-                <summary>2020</summary>
-                <p>[62] Christian Esposito, Oscar Tamburis, Xin Su and Chang Choi*, “Robust Decentralised Trust
-                    Management for the Internet of Things by Using Game Theory", Information Processing and Management,
-                    vol.57, issue 6, pp. 1-16, Nov 2020 (2019 JCR IF: 4.787)</p>
-                <p>[61] Chang Choi, Florin Pop and Jun Huang, “Novel Data Mining Paradigms based on Soft Computing and
-                    Machine Learning in the current and upcoming Information Society Revolution", Concurrency and
-                    Computation Practice and Experience, pp. 1-3, Sep 2020 (2019 JCR IF: 1.447)</p>
-                <p>[60] Xin Su, Yiming Liu and Chang Choi*, “A Blockchain-based P2P Transaction Method and Sensitive
-                    Data Encoding for E-Commerce Transactions", IEEE Consumer Electronics Magazine, vol. 9, issue 4, pp.
-                    56-66, Jul 2020 (2019 JCR IF: 4.016)</p>
-                <p>[59] Chang Choi, Gianni D’Angelo and Francesco Palmieri, "Special Issue on Intelligent Systems in
-                    Sensor Networks and Internet of Things ", Sensors, vol. 20, no. 11, pp. 1-3, Jun 2020 (2019 JCR IF:
-                    3.275)</p>
-                <p>[58] Xin Su, Pascal Nkurunziza, Junrong Gu, Aniello Castiglione and Chang Choi*, “Inter-beam
-                    Interference Cancellation and Physical Layer Security Constraints by 3D Polarized Beamforming in
-                    Power Domain NOMA Systems”, IEEE Transactions on Sustainable Computing, vol. 5, issue 2, pp.
-                    291-303, April-June 2020</p>
-                <p>[57] Yupeng Wang, Jianfeng Jin, Yufeng Li and Chang Choi*, “A Reliable Physical Layer Authentication
-                    Algorithm for Massive IoT Systems", IEEE Access, vol. 8, pp 80684-80690, Apr 2020 (2019 JCR IF:
-                    3.745)</p>
-                <p>[56] Zengpeng Li , Jiuru Wang, Chang Choi and Wenyin Zhang, "Multi-Factor Password-Authenticated Key
-                    Exchange via Pythia PRF Service", CMC-Computers Materials & Continua, vol. 63, no. 2, pp. 663-674,
-                    May 2020 (2019 JCR IF: 4.890)</p>
-                <p>[55] Byeongho Jung, Seongil Bae, Chang Choi and Eulgyu Im, "Packer Identification Method Based on
-                    Byte Sequences", Concurrency and Computation Practice and Experience, vol. 32, issue 8, pp. 1-10,
-                    Apr 2020 (2019 JCR IF: 1.447)</p>
-                <p>[54] Mingu Kim, Chang Choi and Sungbum Pan, "Ensemble Networks for User Recognition in Various
-                    Situations based on Electrocardiogram", IEEE Access, vol. 8, issue 1, pp. 36527-36525, Mar 2020
-                    (2019 JCR IF: 3.745)</p>
-                <p>[53] Haoxiang Wang, Zhihui Li, Yang Li, B.B. Gupta and Chang Choi*, "Visual Saliency Guided Complex
-                    Image Retrieval", Pattern Recognition Letters, vol.130, pp. 64-72, Feb 2020 (2019 JCR IF: 3.255)</p>
-                <p>[52] Tingting Zhang, Jinwei Xie, Xu Zhou and Chang Choi*, "The effects of depth of field on
-                    subjective evaluation of aesthetic appeal and image quality of photographs", IEEE Access, vol. 8,
-                    issue 1, pp. 13467-13475, Jan 2020 (2019 JCR IF: 3.745)</p>
-                <p>[51] Inam Ullah, Yu Shen, Xin Su, Christian Esposito and Chang Choi*, "A Localization based on
-                    Unscented Kalman Filter and Particle Filter Localization Algorithms", IEEE Access, vol. 8, pp.
-                    2233-2246, Jan 2020 (2019 JCR IF: 3.745)</p>
-                <p>[50] Chang Choi, Francesco Piccialli and Jason J. Jung , “Internet of Knowledge", Future Generation
-                    Computer Systems, vol. 102, pp. 948-949, Jan 2020 (2019 JCR IF: 6.013) - Top 7% Journal</p>
-                <p>[49] Yupeng Wang, Tianlong Liu, Chang Choi* and Haoxiang Wang, "Green Resource Allocation Method for
-                    Intelligent Medical Treatment Oriented Service in a 5G Mobile Network", Concurrency and Computation:
-                    Practice and Experience, vol. 32, issue 1, pp. 1-10, Jan 2020 (2019 JCR IF: 1.447)</p>
-            </details>
-            <details>
-                <summary>2019</summary>
-                <p>[48] Chang Choi, Francesco Palmieri, Juw Won Park and Hsing-Chung Chen, "Guest Editorial: Soft
-                    Computing Applications for Novel and Upcoming Distributed and Parallel Systems, from Cloud Computing
-                    and Beyond", IEEE Transactions on Industrial Informatics, vol. 15 issue 10, pp. 5646-5647, Oct 2019
-                    (2019 JCR IF: 9.112) - Top 3% Journal</p>
-                <p>[47] Chang Choi and Junho Choi, "Ontology-based Security Context Reasoning for Power IoT-Cloud
-                    Security Service", IEEE Access, vol. 7, issue 1, pp. 110510-110517, Aug 2019 (2019 JCR IF: 3.745)
-                </p>
-                <p>[46] James Adu Ansere, Guangjie Han, Hao Wang, Chang Choi and Celimuge Wu, "A Reliable Energy
-                    Efficient Dynamic Spectrum Sensing for Cognitive Radio IoT Networks", IEEE Internet of Things
-                    Journal, vol. 6, no. 4, pp. 6748-6759, Aug 2019 (2019 JCR IF: 9.936) - Top 2% Journal</p>
-                <p>[45] Xin Su, Giancarlo Sperlì, Vincenzo Moscato, Antonio Picariello, Christian Esposito and Chang
-                    Choi*, “An Edge Intelligence Empowered Recommender System enabling Cultural Heritage applications",
-                    IEEE Transactions on Industrial Informatics, vol. 15, issue 7, pp. 4266-4275, Jul 2019 (2019 JCR IF:
-                    9.112) - Top 3% Journal</p>
-                <p>[44] Chang Choi, Christian Esposito, Munque Lee and Junho Choi, “Metamorphic Malicious Code Behavior
-                    Detection Using Probabilistic Inference Methods", Cognitive Systems Research, vol. 56, pp. 142-150,
-                    Aug 2019 (2019 JCR IF: 1.902)</p>
-                <p>[43] Tian Wang, Meina Qiao, Zhiwei Lin, Ce Li, Hichem Snoussi, Zhe Liu and Chang Choi*, “Generative
-                    Neural Networks for Anomaly Detection in Crowded Scenes", IEEE Transactions on Information Forensics
-                    and Security, vol. 14, issue 5, pp. 1390-1399, May 2019 (2019 JCR IF: 6.013) - Top 8% Journal</p>
-                <p>[42] Inam Ullah, Jingyi Chen, Xin Su, Christian Esposito and Chang Choi*, “Localization and Detection
-                    of Targets in Underwater Wireless Sensor Using Distance and Angle Based Algorithms", IEEE Access,
-                    vol. 7, pp. 45693-45704, Apr 2019 (2019 JCR IF: 3.745)</p>
-                <p>[41] Daming Li, Lianbing Deng, Brij Bhooshan Gupta, Haoxiang Wang and Chang Choi*, “A Novel CNN based
-                    Security Guaranteed Image Watermarking Generation Scenario for Smart City Applications”, Information
-                    Sciences, vol. 479, pp. 432-447, Apr 2019 (2019 JCR IF: 5.910) - Top 5% Journal</p>
-                <p>[40] Ilsun You, Chang Choi, Vishal Sharma, Isaac Woungang and Bharat K. Bhargava, "Guest Editorial:
-                    Advances In Security and Privacy Technologies for Forthcoming Smart Systems, Services, Computing,
-                    and Networks", Intelligent Automation And Soft Computing, vol. 25, no. 1, pp. 117-119, Mar 2019
-                    (2019 JCR IF: 1.276)</p>
-                <p>[39] Zengpeng Li*, Chunguang Ma*, Minghao Zhao and Chang Choi*, “Efficient oblivious transfer
-                    construction via multiple bits dual-mode cryptosystem for secure selection in the cloud", Journal of
-                    the Chinese Institute of Engineers, vol. 42, issue 1, pp. 97-106, Feb 2019 (2019 JCR IF: 0.667)</p>
-                <p>[38] Tian Wang, Ruoxi Qin, Yang Chen, Hichem Snoussi and Chang Choi*, “A Reinforcement Learning
-                    Approach for UAV Target Searching and Tracking", Multimedia Tools and Applications, vol. 78, issue
-                    4, pp. 4347-4364, Feb 2019 (2019 JCR IF: 2.313)</p>
-                <p>[37] Yupeng Wang, Zelong Yu, Jun Huang and Chang Choi*, “A Novel Energy Efficient Neighbor Discovery
-                    Procedure in a Wireless Self-organization Network", Information Sciences, vol. 476, pp. 429-438, Feb
-                    2019 (2019 JCR IF: 5.910) - Top 5% Journal</p>
-            </details>
-            <details>
-                <summary>2018</summary>
-                <p>[36] Christian Esposito, Xin Su, Shadi Aljawarneh and Chang Choi*, “Securing Collaborative Deep
-                    Learning in Industrial Applications within Adversarial Scenarios", IEEE Transactions on Industrial
-                    Informatics, vol 14, issue 11, pp. 4972-4981, Nov 2018 (2019 JCR IF: 9.112) - Top 3% Journal</p>
-                <p>[35] Guofang Dong, Pu Sun, Wenbo Shi and Chang Choi*, “A Novel Valuation Pruning Optimization Fuzzing
-                    Test Model Based on Mutation Tree for Industrial Control Systems", Applied Soft Computing, vol. 70,
-                    pp. 896-902, Sep 2018 (2019 JCR IF: 5.472) - Top 8% Journal</p>
-                <p>[34] Xin Su, Leilei Meng, Ziyu Wang, Chunsai Dui and Chang Choi*, “Fine-grained Big Traffic Data
-                    Reverse-charge System: A Method of Saving Expenses", Mobile Networks and Applications, vol. 23,
-                    issue 4, pp. 1082-1088, Aug 2018 (2019 JCR IF: 2.602)</p>
-                <p>[33] Ion-Dorinel Filip, Florin Pop, Cristina Serbanescu, Chang Choi, "Microservices Scheduling Model
-                    over Heterogeneous Cloud-Edge Environments as Support for IoT Applications", IEEE Internet of Things
-                    Journal, vol. 5, issue 4, pp. 2672-2681, Aug 2018 (2019 JCR IF: 9.936) - Top 2% Journal</p>
-                <p>[32] Chang Choi, Marek R. Ogiela and Christian Esposito, "Editorial Note: Semantic Approaches for
-                    Multimedia Retrieval Applications", Multimedia Tools and Applications, vol. 77, issue 14, pp
-                    18527-18527, Jul 2018 (2019 JCR IF: 2.313)</p>
-                <p>[31] Chang Choi, Christian Esposito, Haoxiang Wang, Zhe Liu and Junho Choi, “Intelligent Power
-                    Equipment Management based on Distributed Context-Aware Inference in Smart Cities", IEEE
-                    Communications Magazine, vol. 56, no. 7, pp.212-217, Jul 2018 (2019 JCR IF: 11.052)- Top 2% Journal
-                </p>
-                <p>[30] Xin Su, Aniello Castiglione, Christian Esposito and Chang Choi*, “Power Domain NOMA to Support
-                    Group Communication in Public Safety Networks”, Future Generation Computer Systems, vol. 84, pp.
-                    228-238, Jul 2018 (2019 JCR IF: 6.125) - Top 7% Journal</p>
-                <p>[29] Chang Choi, Chulwoong Choi, Junho Choi and Pankoo Kim, "Improved Performance Optimization for
-                    Massive Small Files in Cloud Computing Environment", Annals of Operations Research, vol. 265, issue
-                    2, pp. 305-317, Jun 2018 (2019 JCR IF: 2.583)</p>
-                <p>[28] Htet Myet Lynn, Chang Choi and Pankoo Kim, "An Improved Method of Automatic Text Summarization
-                    for Web Contents using Lexical Chain with Semantic Related Terms", Soft Computing, vol. 22, issue
-                    12, pp. 4013-4023, Jun 2018 (2019 JCR IF: 3.050)</p>
-                <p>[27] Xin Su, Ziyu Wang, and Xiaofeng Liu, Chang Choi and Dongmin Choi, "Study to Improve Security for
-                    IoT Smart Device Controller: Drawbacks and Countermeasures", Security and Communication Networks,
-                    vol. 2018, Article ID 4296934, Jun 2018 (2019 JCR IF: 1.288)</p>
-                <p>[26] Yuan Gao, Zhixiang Deng, Dongmin Choi and Chang Choi*, “Combined Pre-detection and Sleeping for
-                    Energy-efficient Spectrum Sensing in Cognitive Radio Networks”, Journal of Parallel and Distributed
-                    Computing, vol. 114, pp. 85-94, Apr 2018 (2019 JCR IF : 2.296)</p>
-                <p>[25] YuPeng Wang, Xin Dai, Jason J. Jung and Chang Choi*, “Performance Analysis of Smart Cultural
-                    Heritage Protection Oriented Wireless Networks”, Future Generation Computer Systems, vol. 81, pp.
-                    593-600, Apr 2018 (2019 JCR IF: 6.125) - Top 7% Journal</p>
-                <p>[24] Xiaoyu Lan, Lening Wang, Yupeng Wang, Chang Choi and Dongmin Choi, "Tensor 2D DOA Estimation for
-                    Cylindrical Conformal antenna Array in Massive MIMO System under Unknown Mutual Coupling", IEEE
-                    Access, vol. 6, issue 1, pp. 7864-7871, Mar 2018 (2019 JCR IF: 3.745)</p>
-                <p>[23] Chang Choi, Marek R. Ogiela and Hsing-Chung Chen, “Intelligent Approaches for Security
-                    Technologies", Concurrency and Computation: Practice and Experience, vol 30, issue 3, Feb 2018 (2019
-                    JCR IF: 1.447)</p>
-                <p>[22] Taekeun Hong, Chang Choi, Juhyun Shin, "CNN-based malicious user detection in social networks",
-                    Concurrency and Computation Practice and Experience, vol.30, issue 2, pp. 1-10, Jan 2018 (2019 JCR
-                    IF: 1.447)</p>
-            </details>
-            <details>
-                <summary>2017</summary>
-                <p>[21] Xin Su, Yang Wang, Dongmin Choi, Pankoo Kim and Chang Choi*, “Channel Allocation and Power
-                    Control Schemes for Cross-tier 3GPP LTE Networks to Support Multimedia Applications”, Multimedia
-                    Tools and Applications, vol. 76, issue 24, pp. 25875-25891, Dec 2017 (2019 JCR IF: 2.313)</p>
-                <p>[20] Christian Esposito and Chang Choi*, “Signaling game based strategy for secure positioning in
-                    wireless sensor networks”, Pervasive and Mobile Computing, vol. 40, pp. 611-627, Sep 2017 (2019 JCR
-                    IF: 2.725)</p>
-                <p>[19] Eunji Lee, Chang Choi and Pankoo Kim, "Intelligent Handover Scheme for Drone Using Fuzzy
-                    Inference Systems",IEEE Access, vol. 5, pp. 13712-13719, Aug 2017 (2019 JCR IF: 3.745)</p>
-                <p>[18] Chang Choi, Junho Choi and Pankoo Kim, "Abnormal behavior pattern mining for unknown threat
-                    detection", Computer Systems Science & Engineering, vol. 32, no. 2, pp. 171-177, Mar 2017 (2019 JCR
-                    IF: 0.278)</p>
-            </details>
-            <details>
-                <summary>2016</summary>
-                <p>[17] Yupeng Wang, Xin Su, Dongmin Choi and Chang Choi*, “Coordinated Scheduling Algorithm for System
-                    Utility Maximization with Heterogeneous QoS Requirements in Wireless Relay Networks”, IEEE Access,
-                    vol. 4, issue 1, pp. 8351-8361, Dec 2016 (2019 JCR IF: 3.745)</p>
-                <p>[16] Xin Su, HaiFeng Yu, Wansoo Kim, Chang Choi and Dongmin Choi, “Interference cancellation for
-                    non-orthogonal multiple access used in future wireless mobile networks”, EURASIP Journal on Wireless
-                    Communications and Networking, vol 2016, Dec 2016 (2019 JCR IF: 1.408)</p>
-                <p>[15] Xin Su, Chengchao Liang, Dongmin Choi and Chang Choi*, “Power Allocation Scheme for
-                    Femto-to-Macro Downlink Interference Reduction for Smart Devices in Ambient Intelligence”, Mobile
-                    Information Systems, vol. 2016, article ID 7172515, Dec 2016 (2019 JCR IF: 1.508)</p>
-                <p>[14] Ilsun You, Jaedeok Lim, Jeongnyeo Kim, Hyobeom Ahn and Chang Choi*, "Adaptive authentication
-                    scheme for mobile devices in proxy MIPv6 networks", IET Communications, vol. 10, issue 17, pp.
-                    2319-2327, Nov. 2016 (2019 JCR IF: 1.664)</p>
-                <p>[13] Junho Choi, Chang Choi, Hoon Ko and Pankoo Kim, “Intelligent Healthcare Service using Health
-                    Lifelog Analysis”, Journal of Medical Systems, vol. 40, issue. 8, article no. 188, Aug 2016 (2019
-                    JCR IF: 3.058) </p>
-            </details>
-            <details>
-                <summary>2015</summary>
-                <p>[12] Junho Choi, Woon Sung, Chang Choi and Pankoo Kim, “Personal information leakage detection method
-                    using the inference-based access control model on the Android platform”, Pervasive and Mobile
-                    Computing, vol. 24, pp. 138-149, Dec 2015 (2019 JCR IF: 2.769)</p>
-                <p>[11] Junho Choi, Chang Choi, Ilsun You and Pankoo Kim, “Polymorphic Malicious JavaScript Code
-                    Detection for APT Attack Defense”, Journal of Universal Computer Science, vol. 21, no. 3, pp.
-                    369-383, Mar 2015 (2019 JCR IF: 0.701)</p>
-            </details>
-            <details>
-                <summary>2014</summary>
-                <p>[10] Ilsun You, Junho Choi, Chang Choi, and Pankoo Kim, “Intelligent Healthcare Service Based on
-                    Context Inference Using Smart Device”, Soft Computing, vol. 18, no. 12, pp. 2577-2586, Dec 2014
-                    (2019 JCR IF: 3.050)</p>
-                <p>[9] Junho Choi, Chang Choi, Byeongkyu Ko and Pankoo Kim, “A Method of DDoS Attack Detection using
-                    HTTP Packet Pattern and Rule Engine in Cloud Computing Environment”, Soft Computing, vol. 18, no. 9,
-                    pp. 1697-1703, Sep 2014 (2019 JCR IF: 3.050)</p>
-                <p>[8] Chang Choi, Junho Choi and Pankoo Kim, “Ontology based Access Control Model for Security Policy
-                    Reasoning in Cloud Computing”, Journal of Supercomputing, vol. 67, issues 3, pp. 711-722, Mar 2014
-                    (2019 JCR IF: 2.469)</p>
-            </details>
-            <details>
-                <summary>2013</summary>
-                <p>[7] Chang Choi, Junho Choi, Eunji Lee, Ilsun You and Pankoo Kim, “Probabilistic Spatio-Temporal
-                    Inference for Motion Event Understanding”, Neurocomputing, vol. 122, pp. 24-32, Dec. 2013 (2019 JCR
-                    IF: 4.438)</p>
-                <p>[6] Junho Choi, Chang Choi, Kangbin Yim, Jeongnyeo Kim and Pankoo Kim, “Intelligent Reconfigurable
-                    Method of Cloud Computing Resources for Multimedia Data Delivery”, INFORMATICA, vol. 24, no. 3, pp.
-                    381-394, Sep. 2013 (2019 JCR IF : 3.312) - Top 3% Journal</p>
-            </details>
-            <details>
-                <summary>2012</summary>
-                <p>[5] Junho Choi, Chang Choi, Dongjin Choi, Jungin Kim and Pankoo Kim, “Automatic Extraction of
-                    Semantic Concept-Relation Triple Pattern from Wikipedia Articles”, INFORMATION : An International
-                    Interdisciplinary Journal, vol. 15, no. 7, pp. 2755-2770, Jul 2012 (2012 JCR IF: 0.358)</p>
-                <p>[4] Chang Choi, Junho Choi, Juhyun Shin, Sung-Ryul Kim and Pankoo Kim, “Semantic Representation of
-                    Motion for Tracing Object in Surveillance System”, Journal of Internet Technology, vol. 13, no. 4,
-                    pp. 621-630, Jul 2012 (2019 JCR IF: 0.786)</p>
-                <p>[3] Junho Choi, Chang Choi, Byeong-kyu Ko and Pankoo Kim, “Detection of Cross Site Scripting Attack
-                    in Wireless Networks using n-Gram and SVM”, Mobile Information Systems, vol. 8, pp. 275-286, Jun
-                    2012 (2019 JCR IF: 1.508)</p>
-            </details>
-            <details>
-                <summary>2011</summary>
-                <p>[2] Myunggwon Hwang, Chang Choi, Pankoo Kim, “Automatic Enrichment of Semantic Relation Network and
-                    its Application to Word Sense Disambiguation”, IEEE Transactions on Knowledge and Data Engineering,
-                    vol. 23, no. 6, pp. 845-858, Jun 2011 (2019 JCR IF: 4.935)</p>
-                <p>[1] Chang Choi, Myunggwon Hwang, Dongjin Choi, Junho Choi and Pankoo Kim, “Automatic Document Tagging
-                    using Online Knowledge Base”, INFORMATION : An International Interdisciplinary Journal, vol. 14, no.
-                    5, pp. 1709-1720, May 2011 (2012 JCR IF: 0.358)</p>
-            </details>
-        </div>
-    </section>
-    <!-- Research Projects-->
-    <section class="page-section" id="research_projects">
-        <div class="container">
-            <div class="text-center">
-                <h2 class="section-heading text-uppercase">research projects</h2>
-                <h3 class="section-subheading text-muted">IIP Lab Research Projects</h3>
-            </div>
-            <ul class="timeline">
-                <li class="timeline-inverted">
-                    <div class="timeline-image" style="background-color: #f8f9fa"><img class="rounded-circle img-fluid"
-                            src="{% static 'img/NRF.png' %}" alt="" /></div>
-                    <div class="timeline-panel">
-                        <div class="timeline-heading">
-                            <h4>2021.09 - 2025.09</h4>
-                            <h4 class="subheading">NRF</h4>
-                        </div>
-                        <div class="timeline-body">
-                            <p class="text-muted">Development of a highly reliable multi-bio-certification system based
-                                on knowledge Inference and deep learning for robust security certification</p>
+                            <h4>Nam Gyu Jung</h4>
+                            <p class="text-muted">Researcher (Master)</p>
                         </div>
                     </div>
-                </li>
-                <li>
-                    <div class="timeline-image" style="background-color: #f8f9fa"><img class="rounded-circle img-fluid"
-                            src="{% static 'img/NSSC.jpg' %}" alt="" /></div>
-                    <div class="timeline-panel">
-                        <div class="timeline-heading">
-                            <h4>2021.04 - 2026.12</h4>
-                            <h4 class="subheading">NSSC</h4>
-                        </div>
-                        <div class="timeline-body">
-                            <p class="text-muted">Development of quanitive risk assessment model for nuclear power
-                                sabotage according to cyber attack</p>
+                    <div class="col-lg-4">
+                        <div class="team-member">
+                            <a class="portfolio-link" data-toggle="modal" href="#jun_ho_yoon_portfolio">
+                                <img class="mx-auto rounded-circle" src="{% static 'people/jun_ho_yoon.PNG'%}" alt="" />
+                            </a>
+                            <h4>Jun Ho Yoon</h4>
+                            <p class="text-muted">Researcher (Master)</p>
                         </div>
                     </div>
-                </li>
-                <li class="timeline-inverted">
-                    <div class="timeline-image" style="background-color: #f8f9fa"><img class="rounded-circle img-fluid"
-                            src="{% static 'img/NRF.png' %}" alt="" /></div>
-                    <div class="timeline-panel">
-                        <div class="timeline-heading">
-                            <h4>2020.12 - 2021.11</h4>
-                            <h4 class="subheading">NRF</h4>
-                        </div>
-                        <div class="timeline-body">
-                            <p class="text-muted">K-EU research group organize for Research on Massive Deployment and
-                                Big Data oriented Intelligent Security Mechanism in IoT</p>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="timeline-image" style="background-color: #f8f9fa"><img class="rounded-circle img-fluid"
-                            src="{% static 'img/BK21.PNG' %}" alt="" /></div>
-                    <div class="timeline-panel">
-                        <div class="timeline-heading">
-                            <h4>2020.09 - 2027.08</h4>
-                            <h4 class="subheading">BK21</h4>
-                        </div>
-                        <div class="timeline-body">
-                            <p class="text-muted">FAST Artificial Intelligence Convergence</p>
-                        </div>
-                    </div>
-                </li>
-                <li class="timeline-inverted">
-                    <div class="timeline-image" style="background-color: #f8f9fa"><img class="rounded-circle img-fluid"
-                            src="{% static 'img/IITP.jpg' %}" alt="" /></div>
-                    <div class="timeline-panel">
-                        <div class="timeline-heading">
-                            <h4>2020.07 - 2021.12</h4>
-                            <h4 class="subheading">IITP</h4>
-                        </div>
-                        <div class="timeline-body">
-                            <p class="text-muted">Development of Smart Signage Technology for Automatic Classification
-                                of Untact Examination and Patient Status Based on AI</p>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="timeline-image" style="background-color: #f8f9fa"><img class="rounded-circle img-fluid"
-                            src="{% static 'img/NRF.png' %}" alt="" /></div>
-                    <div class="timeline-panel">
-                        <div class="timeline-heading">
-                            <h4>2019.01 - 2021.12</h4>
-                            <h4 class="subheading">NRF</h4>
-                        </div>
-                        <div class="timeline-body">
-                            <p class="text-muted">Research on Key Technology for Real-Time Fault Diagnosis of
-                                Intelligent Production System Based on Industrial IoT</p>
-                        </div>
-                    </div>
-                </li>
-                <li class="timeline-inverted">
-                    <div class="timeline-image" style="background-color: #f8f9fa"><img class="rounded-circle img-fluid"
-                            src="{% static 'img/NRF.png' %}" alt="" /></div>
-                    <div class="timeline-panel">
-                        <div class="timeline-heading">
-                            <h4>2017.11 - 2021.10</h4>
-                            <h4 class="subheading">NRF</h4>
-                        </div>
-                        <div class="timeline-body">
-                            <p class="text-muted">Research on Intelligent Power Management Technology Based on
-                                Distributed Situation Awareness Inference in Smart City</p>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </section>
-    <!-- Members-->
-    <section class="page-section" id="members" style="background-color:#f3fbfd;">
-        <div class="container">
-            <div class="text-center">
-                <h2 class="section-heading text-uppercase">Our Members</h2>
-                <h3 class="section-subheading text-muted">IIP Lab Members</h3>
-            </div>
-            <div class="row">
-                <div style="width: 100%;">
-                    <hr style="border: 3px solid #222222;">
-                    <h2 style="text-align: left; font-style: bold; color: #222222; padding-bottom: 40px;"
-                        class="section-subheading text-muted">Professor</h2>
-                </div>
-                <div class="col-lg-4">
-                    <div class="team-member">
-                        <a class="portfolio-link" href="https://sites.google.com/site/phdchangchoi/">
-                            <img class="mx-auto rounded-circle" src="{% static 'people/choi_chang.PNG' %}" alt="" />
-                        </a>
-                        <h4>Chang Choi</h4>
-                        <p class="text-muted">Professor</p>
-                    </div>
-                </div>
-                <div style="width: 100%;">
-                    <hr style="border: 3px solid #222222;">
-                    <h2 style="text-align: left; font-style: bold; color: #222222; padding-bottom: 40px;"
-                        class="section-subheading text-muted">Researcher (Master)</h2>
-                </div>
-                <div class="col-lg-4">
-                    <div class="team-member">
-                        <a class="portfolio-link" data-toggle="modal" href="#sae_bom_lee_portfolio">
-                            <img class="mx-auto rounded-circle" src="{% static 'people/sae_bom_lee.PNG' %}" alt="" />
-                        </a>
-                        <h4>Sae Bom Lee</h4>
-                        <p class="text-muted">Researcher (Master)</p>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="team-member">
-                        <a class="portfolio-link" data-toggle="modal" href="#nam_gyu_jung_portfolio">
-                            <img class="mx-auto rounded-circle" src="{% static 'people/nam_gyu_jung.jpg' %}" alt="" />
-                        </a>
-                        <h4>Nam Gyu Jung</h4>
-                        <p class="text-muted">Researcher (Master)</p>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="team-member">
-                        <a class="portfolio-link" data-toggle="modal" href="#jun_ho_yoon_portfolio">
-                            <img class="mx-auto rounded-circle" src="{% static 'people/jun_ho_yoon.PNG'%}" alt="" />
-                        </a>
-                        <h4>Jun Ho Yoon</h4>
-                        <p class="text-muted">Researcher (Master)</p>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="team-member">
-                        <a class="portfolio-link" data-toggle="modal" href="#yun_sang_joo_portfolio">
+                    <div class="col-lg-4">
+                        <div class="team-member">
+                            <a class="portfolio-link" data-toggle="modal" href="#yun_sang_joo_portfolio">
                             <img class="mx-auto rounded-circle" src="{% static 'people/yun_sang_joo.jpg' %}" alt="" />
-                        </a>
-                        <h4>Yun Sang Joo</h4>
-                        <p class="text-muted">Researcher (Master)</p>
+                            </a>
+                            <h4>Yun Sang Joo</h4>
+                            <p class="text-muted">Researcher (Master)</p>
+                        </div>
                     </div>
-                </div>
-
-                <div class="col-lg-4">
-                    <div class="team-member">
-                        <a class="portfolio-link" data-toggle="modal" href="#Hacı_İsmail_Aslan_portfolio">
-                            <img class="mx-auto rounded-circle" src="{% static 'people/Hacı_İsmail_Aslan.jpg'%}"
-                                alt="" />
-                        </a>
-                        <h4>Hacı İsmail Aslan</h4>
-                        <p class="text-muted">Researcher (Master)</p>
+                    
+                    <div class="col-lg-4">
+                        <div class="team-member">
+                            <a class="portfolio-link" data-toggle="modal" href="#Hacı_İsmail_Aslan_portfolio">
+                                <img class="mx-auto rounded-circle" src="{% static 'people/Hacı_İsmail_Aslan.jpg'%}" alt="" />
+                            </a>
+                            <h4>Hacı İsmail Aslan</h4>
+                            <p class="text-muted">Researcher (Master)</p>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="team-member">
-                        <a class="portfolio-link" data-toggle="modal" href="#zi_yang_gong_portfolio">
-                            <img class="mx-auto rounded-circle" src="{% static 'people/zi_yang_gong.jpg'%}" alt="" />
-                        </a>
-                        <h4>Ziyang Gong</h4>
-                        <p class="text-muted">Researcher (Master)</p>
+                    <div class="col-lg-4">
+                        <div class="team-member">
+                            <a class="portfolio-link" data-toggle="modal" href="#zi_yang_gong_portfolio">
+                                <img class="mx-auto rounded-circle" src="{% static 'people/zi_yang_gong.jpg'%}" alt="" />
+                            </a>
+                            <h4>Ziyang Gong</h4>
+                            <p class="text-muted">Researcher (Master)</p>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="team-member">
-                        <a class="portfolio-link" data-toggle="modal" href="#Muhammad_Yasir_portfolio">
-                            <img class="mx-auto rounded-circle" src="{% static 'people/Muhammad_Yasir.jpg'%}" alt="" />
-                        </a>
-                        <h4>Muhammad Yasir</h4>
-                        <p class="text-muted">Researcher (Master)</p>
+                    <div class="col-lg-4">
+                        <div class="team-member">
+                            <a class="portfolio-link" data-toggle="modal" href="#Muhammad_Yasir_portfolio">
+                                <img class="mx-auto rounded-circle" src="{% static 'people/Muhammad_Yasir.jpg'%}" alt="" />
+                            </a>
+                            <h4>Muhammad Yasir</h4>
+                            <p class="text-muted">Researcher (Master)</p>
+                        </div>
                     </div>
-                </div>
-                <div style="width: 100%;">
-                    <hr style="border: 3px solid #222222;">
-                    <h2 style="text-align: left; font-style: bold; color: #222222; padding-bottom: 40px;"
-                        class="section-subheading text-muted">Researcher (Undergraduate)</h2>
-                </div>
-                <div class="col-lg-4">
-                    <div class="team-member">
-                        <a class="portfolio-link" data-toggle="modal" href="#ye_jin_kim_portfolio">
+                    <div style="width: 100%;">
+                        <hr style="border: 3px solid #222222;">
+                        <h2 style="text-align: left; font-style: bold; color: #222222; padding-bottom: 40px;" class="section-subheading text-muted">Researcher (Undergraduate)</h2>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="team-member">
+                            <a class="portfolio-link" data-toggle="modal" href="#ye_jin_kim_portfolio">
                             <img class="mx-auto rounded-circle" src="{% static 'people/ye_jin_kim.jpg'%}" alt="" />
-                        </a>
-                        <h4>Ye Jin Kim</h4>
-                        <p class="text-muted">Researcher (Undergraduate)</p>
+                            </a>
+                            <h4>Ye Jin Kim</h4>
+                            <p class="text-muted">Researcher (Undergraduate)</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="team-member">
+                            <a class="portfolio-link" data-toggle="modal" href="#in_pyo_hong_portfolio">
+                                <img class="mx-auto rounded-circle" src="{% static 'people/hong_in_pyo.jpg'%}" alt="" />
+                            </a>
+                            <h4>In Pyo Hong</h4>
+                            <p class="text-muted">Researcher (Undergraduate)</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="team-member">
+                            <a class="portfolio-link" data-toggle="modal" href="#ki_hoon_lee_portfolio">
+                                <img class="mx-auto rounded-circle " " src="{% static 'people/ki_hoon_lee.jpg'%}" alt="" />
+                            </a>
+                            <h4>Ki Hoon Lee</h4>
+                            <p class="text-muted">Researcher (Undergraduate)</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="team-member">
+                            <a class="portfolio-link" data-toggle="modal" href="#woo_chan_choo_portfolio">
+                                <img class="mx-auto rounded-circle" src="{% static 'people/choo_woo_chan.jpg'%}" alt="" />
+                            </a>
+                            <h4>Woo Chan Choo</h4>
+                            <p class="text-muted">Researcher (Undergraduate)</p>
+                        </div>
+                    </div>
+                    
+                    <div style="width: 100%;">
+                        <hr style="border: 3px solid #222222;">
+                        <h2 style="text-align: left; font-style: bold; color: #222222; padding-bottom: 40px;" class="section-subheading text-muted">Alumni</h2>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="team-member">
+                            <a class="portfolio-link" data-toggle="modal">
+                                <img class="mx-auto rounded-circle" src="{% static 'people/seung_won_lee.PNG'%}" alt="" />
+                            </a>
+                            <h4>Seung Won Lee</h4>
+                            <p class="text-muted">Professor of Convergence Software at Kyungmin University</p>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="team-member">
-                        <a class="portfolio-link" data-toggle="modal" href="#in_pyo_hong_portfolio">
-                            <img class="mx-auto rounded-circle" src="{% static 'people/hong_in_pyo.jpg'%}" alt="" />
-                        </a>
-                        <h4>In Pyo Hong</h4>
-                        <p class="text-muted">Researcher (Undergraduate)</p>
+                <div class="row">
+                    <div class="col-lg-8 mx-auto text-center"><p class="large text-muted">IIP Lab - Intelligent Information Processing Lab</p></div>
+                </div>
+            </div>
+        </section>
+        <!-- Awards & Honors -->
+        <section class="page-section" id="awards">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Awards & Honors</h2>
+                    <h3 class="section-subheading text-muted">IIP Lab Awards and Honors</h3>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <div class="portfolio-item">
+                            <img style="margin-top: 30px;" class="img-fluid" src="{% static 'img/sma_bronze.PNG'%}" alt="" />
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-subheading text-muted">SMA2020 BEST PAPER BRONZE</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <div class="portfolio-item">
+                            <img style="margin-top: 30px;" class="img-fluid" src="{% static 'img/sma_silver.PNG' %}" alt="" />
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-subheading text-muted">SMA2020 BEST PAPER SILVER</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <div class="portfolio-item">
+                            <img style="margin-top: 30px;" class="img-fluid" src="{% static 'img/ICNGC2021_POSTER_AWARD.png' %}" alt="" />
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-subheading text-muted">ICNGC2021 EXCELLENT POSTER AWARD</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="team-member">
-                        <a class="portfolio-link" data-toggle="modal" href="#ki_hoon_lee_portfolio">
-                            <img class="mx-auto rounded-circle " " src=" {% static 'people/ki_hoon_lee.jpg' %}"
-                                alt="" />
-                        </a>
-                        <h4>Ki Hoon Lee</h4>
-                        <p class="text-muted">Researcher (Undergraduate)</p>
-                    </div>
+            </div>
+        </section>
+        <!-- Contact-->
+        <section class="page-section" id="contact">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Contact Us</h2>
+                    <h3 class="section-subheading text-muted">Intelligent Information Processing Lab</h3>
                 </div>
-                <div class="col-lg-4">
-                    <div class="team-member">
-                        <a class="portfolio-link" data-toggle="modal" href="#woo_chan_choo_portfolio">
-                            <img class="mx-auto rounded-circle" src="{% static 'people/choo_woo_chan.jpg'%}" alt="" />
-                        </a>
-                        <h4>Woo Chan Choo</h4>
-                        <p class="text-muted">Researcher (Undergraduate)</p>
+                <form id="contactForm" name="sentMessage" novalidate="novalidate">
+                    <div class="row align-items-stretch mb-5">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input style="background-color: #222222;" class="form-control" id="name" type="text" placeholder=" Chang Choi " disabled/>
+                            </div>
+                            <div class="form-group">
+                                <input style="background-color: #222222;" class="form-control" id="email" type="email" placeholder=" changchoi@gachon.ac.kr " disabled/>
+                            </div>
+                            <div class="form-group mb-md-0">
+                                <input style="background-color: #222222;" class="form-control" id="phone" type="tel" placeholder=" +82-31-750-5325 " disabled/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group form-group-textarea mb-md-0">
+                                <textarea style="background-color: #222222;" class="form-control" id="message" placeholder="I am looking for undergraduate or graduate students to work on research projects in AI, Smart Sensor Network and Intelligent Security. Please feel free to contact me by e-mail via changchoi AT gachon.ac.kr."disabled></textarea>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
+            </div>
+        </section>
+        <!-- Footer-->
+        <footer class="footer py-4">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-4 text-lg-left">IIP Lab - Intelligent Information Processing Lab</div>
 
-                <div style="width: 100%;">
-                    <hr style="border: 3px solid #222222;">
-                    <h2 style="text-align: left; font-style: bold; color: #222222; padding-bottom: 40px;"
-                        class="section-subheading text-muted">Alumni</h2>
-                </div>
-                <div class="col-lg-4">
-                    <div class="team-member">
-                        <a class="portfolio-link" data-toggle="modal">
-                            <img class="mx-auto rounded-circle" src="{% static 'people/seung_won_lee.PNG'%}" alt="" />
-                        </a>
-                        <h4>Seung Won Lee</h4>
-                        <p class="text-muted">Professor of Convergence Software at Kyungmin University</p>
+                    <div class="col-lg-4 text-lg-right" style="white-space: nowrap;">
+                        No. 315, College of AI Engineering Hall, 1342 Seongnamdaero, Sujeong-gu, Seongnam-si, Gyeongi-do, Rep. of Korea
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center">
-                    <p class="large text-muted">IIP Lab - Intelligent Information Processing Lab</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Awards & Honors -->
-    <section class="page-section" id="awards">
-        <div class="container">
-            <div class="text-center">
-                <h2 class="section-heading text-uppercase">Awards & Honors</h2>
-                <h3 class="section-subheading text-muted">IIP Lab Awards and Honors</h3>
-            </div>
-            <div class="row">
-                <div class="col-lg-4 col-sm-6 mb-4">
-                    <div class="portfolio-item">
-                        <img style="margin-top: 30px;" class="img-fluid" src="{% static 'img/sma_bronze.PNG'%}"
-                            alt="" />
-                        <div class="portfolio-caption">
-                            <div class="portfolio-caption-subheading text-muted">SMA2020 BEST PAPER BRONZE</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6 mb-4">
-                    <div class="portfolio-item">
-                        <img style="margin-top: 30px;" class="img-fluid" src="{% static 'img/sma_silver.PNG' %}"
-                            alt="" />
-                        <div class="portfolio-caption">
-                            <div class="portfolio-caption-subheading text-muted">SMA2020 BEST PAPER SILVER</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6 mb-4">
-                    <div class="portfolio-item">
-                        <img style="margin-top: 30px;" class="img-fluid"
-                            src="{% static 'img/ICNGC2021_POSTER_AWARD.png' %}" alt="" />
-                        <div class="portfolio-caption">
-                            <div class="portfolio-caption-subheading text-muted">ICNGC2021 EXCELLENT POSTER AWARD</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Contact-->
-    <section class="page-section" id="contact" style="background-color:#e3eef5;">
-        <div class="container">
-            <div class="text-center">
-                <h2 class="section-heading text-uppercase" style="color:black">Contact Us</h2>
-                <h3 class="section-subheading text-muted">Intelligent Information Processing Lab</h3>
-            </div>
-            <form id="contactForm" name="sentMessage" novalidate="novalidate">
-                <div class="row align-items-stretch mb-5">
-                    <div class="col-md-6">
-                        <div class="form-group"style="color: black; height:60px; background-color:white; border-radius:5px 5px;">
-                            <h3 class="text-muted section-subheading text-uppercase" style="padding-left: 30px; padding-top:20px; font-family:Montserrat; font-weight:bolder ">Chang Choi</h3>
-                        </div>
-                        <div class="form-group"style="color: black; height:60px; background-color:white; border-radius:5px 5px;">
-                            <h3 class="text-muted section-subheading text-uppercase" style="padding-left: 30px; padding-top:20px; font-family:Montserrat; font-weight:bolder ">changchoi@gachon.ac.kr</h3>
-                        </div>
-                        <div class="form-group"style="color: black; height:60px; background-color:white; border-radius:5px 5px;">
-                            <h3 class="text-muted section-subheading text-uppercase" style="padding-left: 30px; padding-top:20px; font-family:Montserrat; font-weight:bolder;  ">(+82) 031-750-5325</h3>
-                        </div>
-
-                        
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group"style="color: black; height:230px; background-color:white; border-radius:5px 5px;">
-                            <h3 class="text-muted section-subheading text-uppercase" style="padding-left: 30px; padding-top:20px; font-family:Montserrat; font-weight:bolder; padding-top:60px;">I am looking for undergraduate or graduate students to work on research projects in <br> AI, Smart Sensor Network and Intelligent Security. Please feel free to contact me <br>by e-mail via changchoi AT gachon.ac.kr.</h3>
-                        </div>
-                        
-                    </div>
-                </div>
-            </form>
-        </div>
-    </section>
-    <!-- Footer-->
-    <footer class="footer py-4">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-4 text-lg-left">IIP Lab - Intelligent Information Processing Lab</div>
-
-                <div class="col-lg-4 text-lg-right" style="white-space: nowrap;">
-                    No. 315, College of AI Engineering Hall, 1342 Seongnamdaero, Sujeong-gu, Seongnam-si, Gyeonggi-do,
-                    Rep. of Korea
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- Team Portfolio Modals-->
-    <!-- choi chang -->
-    <div class="portfolio-modal modal fade" id="choi_chang_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}"
-                        alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project Details Go Here-->
-                                <h3 class="text-uppercase">IIP Lab</h3>
-                                <p class="item-intro text-muted">Choi Chang Professor</p>
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
+        </footer>
+        <!-- Team Portfolio Modals-->
+        <!-- choi chang -->
+        <div class="portfolio-modal modal fade" id="choi_chang_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h3 class="text-uppercase">IIP Lab</h3>
+                                    <p class="item-intro text-muted">Choi Chang Professor</p>
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- seung won lee -->
-    <div class="portfolio-modal modal fade" id="seung_won_lee_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}"
-                        alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project Details Go Here-->
-                                <h3 class="text-uppercase">IIP Lab</h3>
-                                <p class="item-intro text-muted">Seung Won Lee Research Professor</p>
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
+        <!-- seung won lee -->
+        <div class="portfolio-modal modal fade" id="seung_won_lee_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h3 class="text-uppercase">IIP Lab</h3>
+                                    <p class="item-intro text-muted">Seung Won Lee Research Professor</p>
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- sae bom lee -->
-    <div class="portfolio-modal modal fade" id="sae_bom_lee_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}"
-                        alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project Details Go Here-->
-                                <h3 class="text-uppercase">IIP Lab</h3>
-                                <p class="item-intro text-muted">Sae Bom Lee Researcher</p>
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
+        <!-- sae bom lee -->
+        <div class="portfolio-modal modal fade" id="sae_bom_lee_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h3 class="text-uppercase">IIP Lab</h3>
+                                    <p class="item-intro text-muted">Sae Bom Lee Researcher</p>
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- nam gyu jung -->
-    <div class="portfolio-modal modal fade" id="nam_gyu_jung_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}"
-                        alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project Details Go Here-->
-                                <h3 class="text-uppercase">IIP Lab</h3>
-                                <p class="item-intro text-muted">Nam Gyu Jung Researcher</p>
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
+        <!-- nam gyu jung -->
+        <div class="portfolio-modal modal fade" id="nam_gyu_jung_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h3 class="text-uppercase">IIP Lab</h3>
+                                    <p class="item-intro text-muted">Nam Gyu Jung Researcher</p>
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Hacı İsmail Aslan  -->
-    <div class="portfolio-modal modal fade" id="Hacı_İsmail_Aslan_portfolio" tabindex="-1" role="dialog"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}"
-                        alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project Details Go Here-->
-                                <h3 class="text-uppercase">IIP Lab</h3>
-                                <p class="item-intro text-muted">Hacı İsmail Aslan Researcher</p>
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
+        <!-- Hacı İsmail Aslan  -->
+        <div class="portfolio-modal modal fade" id="Hacı_İsmail_Aslan_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h3 class="text-uppercase">IIP Lab</h3>
+                                    <p class="item-intro text-muted">Hacı İsmail Aslan Researcher</p>
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Muhammad Yasir -->
-    <div class="portfolio-modal modal fade" id="Muhammad_Yasir_portfolio" tabindex="-1" role="dialog"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}"
-                        alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project Details Go Here-->
-                                <h3 class="text-uppercase">IIP Lab</h3>
-                                <p class="item-intro text-muted">Muhammad Yasir Researcher</p>
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
+        <!-- Muhammad Yasir -->
+        <div class="portfolio-modal modal fade" id="Muhammad_Yasir_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h3 class="text-uppercase">IIP Lab</h3>
+                                    <p class="item-intro text-muted">Muhammad Yasir Researcher</p>
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- ziyang gong -->
-    <div class="portfolio-modal modal fade" id="zi_yang_gong_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}"
-                        alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project Details Go Here-->
-                                <h3 class="text-uppercase">IIP Lab</h3>
-                                <p class="item-intro text-muted">Ziyang Gong Researcher</p>
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
+        <!-- ziyang gong -->
+        <div class="portfolio-modal modal fade" id="zi_yang_gong_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h3 class="text-uppercase">IIP Lab</h3>
+                                    <p class="item-intro text-muted">Ziyang Gong Researcher</p>
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- jun ho yoon -->
-    <div class="portfolio-modal modal fade" id="jun_ho_yoon_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}"
-                        alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project Details Go Here-->
-                                <h3 class="text-uppercase">IIP Lab</h3>
-                                <p class="item-intro text-muted">Jun Ho Yoon Researcher</p>
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
+        <!-- jun ho yoon -->
+        <div class="portfolio-modal modal fade" id="jun_ho_yoon_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h3 class="text-uppercase">IIP Lab</h3>
+                                    <p class="item-intro text-muted">Jun Ho Yoon Researcher</p>
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- yun sang joo -->
-    <div class="portfolio-modal modal fade" id="yun_sang_joo_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}"
-                        alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project Details Go Here-->
-                                <h3 class="text-uppercase">IIP Lab</h3>
-                                <p class="item-intro text-muted">Yun Sang Joo Researcher</p>
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
+        <!-- yun sang joo -->
+        <div class="portfolio-modal modal fade" id="yun_sang_joo_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h3 class="text-uppercase">IIP Lab</h3>
+                                    <p class="item-intro text-muted">Yun Sang Joo Researcher</p>
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- woo chan choo -->
-    <div class="portfolio-modal modal fade" id="woo_chan_choo_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}"
-                        alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project Details Go Here-->
-                                <h3 class="text-uppercase">IIP Lab</h3>
-                                <p class="item-intro text-muted">Woo Chan Choo Researcher</p>
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
+        <!-- woo chan choo -->
+        <div class="portfolio-modal modal fade" id="woo_chan_choo_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h3 class="text-uppercase">IIP Lab</h3>
+                                    <p class="item-intro text-muted">Woo Chan Choo Researcher</p>
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- ye jin kim -->
-    <div class="portfolio-modal modal fade" id="ye_jin_kim_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}"
-                        alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project Details Go Here-->
-                                <h3 class="text-uppercase">IIP Lab</h3>
-                                <p class="item-intro text-muted">Ye Jin Kim Researcher</p>
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
+        <!-- ye jin kim -->
+        <div class="portfolio-modal modal fade" id="ye_jin_kim_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h3 class="text-uppercase">IIP Lab</h3>
+                                    <p class="item-intro text-muted">Ye Jin Kim Researcher</p>
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Ki Hoon Lee -->
-    <div class="portfolio-modal modal fade" id="ki_hoon_lee_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}"
-                        alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project Details Go Here-->
-                                <h3 class="text-uppercase">IIP Lab</h3>
-                                <p class="item-intro text-muted">Ki Hoon Lee Researcher</p>
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
+        <!-- Ki Hoon Lee -->
+        <div class="portfolio-modal modal fade" id="ki_hoon_lee_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h3 class="text-uppercase">IIP Lab</h3>
+                                    <p class="item-intro text-muted">Ki Hoon Lee Researcher</p>
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- In Pyo Hong -->
-    <div class="portfolio-modal modal fade" id="in_pyo_hong_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}"
-                        alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project Details Go Here-->
-                                <h3 class="text-uppercase">IIP Lab</h3>
-                                <p class="item-intro text-muted">In Pyo Hong Researcher</p>
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
-                                <img class="img-fluid d-block mx-auto" src="" alt="" />
+        <!-- In Pyo Hong -->
+        <div class="portfolio-modal modal fade" id="in_pyo_hong_portfolio" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="{% static 'img/close-icon.svg'%}" alt="Close modal" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h3 class="text-uppercase">IIP Lab</h3>
+                                    <p class="item-intro text-muted">In Pyo Hong Researcher</p>
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                    <img class="img-fluid d-block mx-auto" src="" alt="" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Bootstrap core JS-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
-    <!-- Third party plugin JS-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-    <!-- Contact form JS-->
-    <script src="assets/mail/jqBootstrapValidation.js"></script>
-    <script src="assets/mail/contact_me.js"></script>
-    <!-- Core theme JS-->
-    <script src="js/scripts.js"></script>
-</body>
-
+        <!-- Bootstrap core JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        <!-- Contact form JS-->
+        <script src="assets/mail/jqBootstrapValidation.js"></script>
+        <script src="assets/mail/contact_me.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+    </body>
 </html>
